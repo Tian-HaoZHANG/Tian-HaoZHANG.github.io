@@ -143,21 +143,19 @@ You can use `footnote()` to add footnotes. #footnote[Footnotes really interrupt 
 
 You can use `tufted.margin-note()` to place arbitrary *unbroken* margin content anywhere, e.g. an image, inline code, or inline math. #footnote[`box()` can force content to stay in a single paragraph.]
 #tufted.margin-note[
-  #image("../../imgs/tufted-duck-male.webp")
+  #image("../../imgs/kayamori.jpg")
 ]
 #tufted.margin-note[
-  ⬆️ This is a duck, this is `inline code`, and this is inline math $1 + 1 = 2$.\
-  This is a line break
+  ⬆️ This is a Kayamori Ruka.
 ]
 
 ```typ
 // Typst code that places an image and text in the right margin.
 #tufted.margin-note[
-  #image("../../imgs/tufted-duck-male.webp")
+  #image("../../imgs/kayamori.jpg")
 ]
 #tufted.margin-note[
-  ⬆️ This is a duck, this is `inline code`, and this is inline math $1 + 1 = 2$.\\
-  This is a line break
+  ⬆️ This is a Kayamori Ruka.
 ]
 ```
 
@@ -209,18 +207,18 @@ You can use `figure()` to add a caption for any content, especially images and t
 
 Use `image()` to insert images. You can control size with `width` and `height`. For example, `figure + image`:
 
-#figure(caption: "Another duck.")[
-  #image("../../imgs/tufted-duck-female-with-duckling.webp", width: 250pt)
-]<duck>
+#figure(caption: "Another kayamori.")[
+  #image("../../imgs/kayamori.jpg", width: 250pt)
+]<kayamori>
 
-#image("../../imgs/gorilla.webp", height: 250pt)
+#image("../../imgs/aoi&kayamori.jpg", height: 250pt)
 
 ```typ
-#figure(caption: "Another duck.")[
-  #image("../../imgs/tufted-duck-female-with-duckling.webp", width: 250pt)
+#figure(caption: "Another kayamori.")[
+  #image("../../imgs/kayamori.jpg", width: 250pt)
 ]
 
-#image("../../imgs/gorilla.webp", height: 250pt)
+#image("../../imgs/aoi&kayamori.jpg", height: 250pt)
 ```
 
 
@@ -430,13 +428,13 @@ Typst supports cross references. You can label headings, figures, code blocks, e
 
 Link to the @ch1 section.\
 Link to the @code1 block.\
-Link to the @duck figure.\
+Link to the @kayamori figure.\
 Link to the @tbl1 table.
 
 ```typ
 Link to the @ch1 section.\\
 Link to the @code1 block.\\
-Link to the @duck figure.\\
+Link to the @kayamori figure.\\
 Link to the @tbl1 table.
 ```
 

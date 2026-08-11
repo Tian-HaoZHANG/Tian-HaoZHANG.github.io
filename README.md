@@ -18,78 +18,24 @@
 
 ![Tufted website](content/imgs/devices.webp)
 
-> 如果你是纯萌新，很可能会遇到一些新概念，可能会第一次使用终端和命令行，别害怕，本项目不需要你有任何前置知识，十分友好。  
 > 遇到不懂的概念或不会的操作，多看文档、多问 AI、多搜索。  
 > 如果遇到任何问题，你可以：查看 [Wiki 文档](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki)、询问 [DeepWiki](https://deepwiki.com/Yousa-Mirage/Tufted-Blog-Template)、在 [Discussions](https://github.com/Yousa-Mirage/Tufted-Blog-Template/discussions) 中提问和讨论、在 [Issue](https://github.com/Yousa-Mirage/Tufted-Blog-Template/issues) 中提交反馈。
 
-## ✨ 特点
+## 特点
 
-- 🚀 使用 Typst 编写内容，简洁强大，编译极快
-- 🎨 基于 Tufte CSS 设计，极简主义、内容至上，提供清晰、沉浸的阅读体验
-- 📦 内置基于 Python 的跨平台构建脚本，支持增量编译
-- 📝 支持生成 HTML 网页和 PDF 文档，支持链接到 PDF
-- 🌐 内置 GitHub Actions 工作流，一键部署网站
-- 🌙 支持浅色/深色模式自动选择和一键切换
-- 📄 丰富的示例和文档，无需任何前置知识，[简单学习 Typst](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/Typst-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99) 后即可开始编写
+- 使用 Typst 编写内容，简洁强大，编译极快
+- 基于 Tufte CSS 设计，极简主义、内容至上，提供清晰、沉浸的阅读体验
+- 内置基于 Python 的跨平台构建脚本，支持增量编译
+- 支持生成 HTML 网页和 PDF 文档，支持链接到 PDF
+- 内置 GitHub Actions 工作流，一键部署网站
+- 支持浅色/深色模式自动选择和一键切换
+- 丰富的示例和文档，无需任何前置知识，[简单学习 Typst](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/Typst-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99) 后即可开始编写
 
-## 📦 环境准备（仅需一次）
+## 环境准备
 
 本项目只依赖 Typst 和 Python（推荐使用 uv 配置 Python），Typst 用于编译网页，Python 脚本用于自动化构建流程。
 
-### 0. 事前准备
-
-为了进行版本管理、自动构建和拥有更好的编写体验，建议准备好这些项目：
-
-- 拥有一个 GitHub 账号
-- 了解什么是终端，能够在终端中运行命令（可参考 [Wiki 页](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/%E7%BB%88%E7%AB%AF%E4%B8%8E%E5%B7%A5%E4%BD%9C%E8%B7%AF%E5%BE%84)）
-- 安装 Git 以进行代码管理和远程推送（可参考 [Wiki 页](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/Git-%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97)）
-- 使用 [VS Code](https://code.visualstudio.com/) 或其他你喜欢的代码编辑器，并安装 [Tinymist](https://github.com/Myriad-Dreamin/tinymist) 插件以获得 Typst 语言支持（可参考 [Wiki 页](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/Typst-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99)）
-
-### 1. 安装 Typst
-
-> 如果你的系统已经安装 Typst CLI，可以跳过这一步。
-
-[Typst](https://typst.app/) 是一个新兴的、现代化的标记语言排版系统，旨在成为 LaTeX 的现代化替代品，同时比 LaTeX 更简单易学、编译更快、使用更友好。本项目利用 Typst 实验性的 HTML 导出功能将 `.typ` 纯文本源文件编译为网页。
-
-- **方法 1：从 [Typst 下载页面](https://typst.app/open-source/#download)直接下载可执行程序。** 你需要下载压缩包，并将其解压到一个位于 `PATH` 环境变量中的文件夹中。
-  - Windows 用户 (**推荐**) 可将其解压你喜欢的路径，然后将该路径添加到 `PATH` 环境变量中，具体操作可见 [Wiki 页](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/PATH-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)。
-  - macOS / Linux 用户可将其解压到 `/usr/local/bin` 或其他已添加到 `PATH` 的目录中，具体操作可见 [Wiki 页](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/PATH-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)。
-- **方法 2：使用包管理器安装。**
-  - Windows：
-    - 使用 winget：`winget install typst`
-    - 使用 Scoop：`scoop install typst`
-    - 使用 Chocolatey：`choco install typst`
-  - macOS (**推荐**)：
-    - 使用 Homebrew：`brew install typst`
-  - Linux 使用你常用的包管理器安装 (**推荐**)。
-
-完成后打开终端，输入并运行 `typst --version`，如果显示版本号则表示安装成功。
-
-### 2. 安装 Python
-
-> 如果你的系统已经安装 Python >= 3.6，也可以跳过这一步。
-
-本项目使用一个 Python 脚本 `build.py` 来自动化构建流程。理论上只需要安装有 Python 就可以运行，不过为了避免各种 Python 环境问题，推荐使用 [**uv**](https://docs.astral.sh/uv/) 来运行脚本。uv 是一个速度极快的 Python 包和项目管理器，可以简化 Python 安装、环境依赖管理和脚本运行。
-
-你可以按照下面的说明安装 uv：
-
-- Windows：打开终端，运行以下命令：
-
-    ```bash
-    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-    ```
-
-- macOS/Linux：打开终端，运行以下命令：
-
-    ```bash
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-    ```
-
-- 或使用[官方文档](https://docs.astral.sh/uv/getting-started/installation)提到的其他方法。
-
-安装完成后，你可以在终端中运行 `uv --version` 来验证安装是否成功。一旦 uv 安装成功，你不再需要手动安装 Python、操心环境问题，uv 会搞定一切。
-
-## 🚀 快速开始
+## 快速开始
 
 整个模板工作流程如下所示：
 

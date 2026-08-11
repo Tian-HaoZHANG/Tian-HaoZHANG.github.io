@@ -142,21 +142,19 @@
 
 你可以使用 `tufted.margin-note()` 函数在任何地方添加任意的*不分段的*边栏内容。例如，你可以添加一行文本图片、行内代码、行内公式等#footnote[`box()` 函数可以将内容设置在一段内。]。
 #tufted.margin-note[
-  #image("../../imgs/tufted-duck-male.webp")
+  #image("../../imgs/kayamori.jpg")
 ]
 #tufted.margin-note[
-  ⬆️这是一只鸭，这是 `一个行内代码`，这是一个行内公式 $1 + 1 = 2$。\
-  这是换行文本
+  ⬆️这是Kayamori Ruka。
 ]
 
 ```typ
 // 这是设置右侧图片和文本的 Typst 代码。
 #tufted.margin-note[
-  #image("../../imgs/tufted-duck-male.webp")
+  #image("../../imgs/kayamori.jpg")
 ]
 #tufted.margin-note[
-  ⬆️这是一只鸭，这是 `一个行内代码`，这是一个行内公式 $1 + 1 = 2$。\
-  这是换行文本
+  ⬆️这是Kayamori Ruka。
 ]
 ```
 
@@ -208,18 +206,18 @@
 
 使用 `image()` 函数可以添加图片，使用 `width`、`height` 参数可以控制大小，例如 `figure + image`：
 
-#figure(caption: "这也是鸭鸭。")[
-  #image("../../imgs/tufted-duck-female-with-duckling.webp", width: 250pt)
-]<鸭鸭>
+#figure(caption: "这是 Kayamori Ruka。")[
+  #image("../../imgs/kayamori.jpg", width: 250pt)
+]<Kayamori-Ruka>
 
-#image("../../imgs/gorilla.webp", height: 250pt)
+#image("../../imgs/aoi&kayamori.jpg", height: 250pt)
 
 ```typ
-#figure(caption: "这也是鸭鸭。")[
-  #image("../../imgs/tufted-duck-female-with-duckling.webp", width: 250pt)
+#figure(caption: "这也是 Kayamori Ruka。")[
+  #image("../../imgs/kayamori.jpg", width: 250pt)
 ]
 
-#image("../../imgs/gorilla.webp", height: 250pt)
+#image("../../imgs/aoi&kayamori.jpg", height: 250pt)
 ```
 
 
@@ -428,13 +426,13 @@ Typst 支持交叉引用功能。你可以为标题、图片、代码块等元�
 
 这里链接到 @ch1 部分。\
 这里链接到 @code1 部分。\
-这里链接到 @鸭鸭 部分。\
+这里链接到 @Kayamori-Ruka 部分。\
 这里链接到 @tbl1 部分。
 
 ```typ
 这里链接到 @ch1 部分。\
 这里链接到 @code1 部分。\
-这里链接到 @鸭鸭 部分。\
+这里链接到 @Kayamori-Ruka 部分。\
 这里链接到 @tbl1 部分。
 ```
 
