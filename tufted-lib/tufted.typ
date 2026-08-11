@@ -19,7 +19,7 @@
   title: "",
   author: none,
   description: "",
-  lang: "zh",
+  lang: "en",
   date: none,
   extra-info: none,
   website-title: "",
@@ -131,7 +131,7 @@
                 )
               },
             )
-          }
+          },
         )
 
         // Main content

@@ -11,6 +11,6 @@
 - #link("github-deploy-en/", "GitHub Deployment")
 - #link("custom-styling-en/", "Custom Styling")
 - #link(
-    "Liu Chen (陈骝)_Waves and Instabilities in Plasmas.pdf",
-    "Retypesetted version of Liu Chen (陈骝)'s textbook《Waves and Instabilities in Plasmas》",
+    "waves and instabilities in plasmas 20260810.pdf",
+    "Liu Chen (陈骝)'s textbook《Waves and Instabilities in Plasmas》— retypesetted",
   )
