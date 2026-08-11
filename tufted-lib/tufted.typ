@@ -19,7 +19,7 @@
   title: "",
   author: none,
   description: "",
-  lang: "en",
+  lang: "zh",
   date: none,
   extra-info: none,
   website-title: "",
