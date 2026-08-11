@@ -2,7 +2,7 @@
 #show: template.with(
   title: "Edward R. Tufte",
   description: "CV of Edward R. Tufte",
-  lang: "en"
+  lang: "en",
 )
 #import "@preview/citegeist:0.2.2": load-bibliography
 
@@ -14,8 +14,7 @@
   Email: #link("mailto:noreply@edwardtufte.com", "noreply@edwardtufte.com")
 ]
 
-#link("CV-PDF.pdf")[[PDF version is available! Click me!]]\
-#link("CV-PDF.pdf")[[点击这里查看 PDF 版本！]]
+#link("CV-PDF.pdf")[[Click here for a PDF version]]
 
 Research in statistical evidence and analytical design for information visualization, integrating principles from statistics, graphic design, and cognitive science for the effective presentation of quantitative data.
 
