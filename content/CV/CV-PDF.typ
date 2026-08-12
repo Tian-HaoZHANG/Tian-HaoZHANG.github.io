@@ -9,7 +9,8 @@
 #show link: set text(fill: rgb(0, 0, 255))
 #show ref: set text(fill: rgb(0, 0, 255))
 
-= Tian-Hao Zhang (张天昊)
+
+= Tian-Hao Zhang (#text(font: "STSong")[张天昊])
 
 #text(
   weight: "regular",
@@ -20,8 +21,7 @@ Website: #link("https://tian-haozhang.github.io/")
 #h(3em)
 Email: #link("mailto:thzhang@stu.pku.edu.cn")
 
-Research in space plasma physics, with a focus on the dynamics concerning with planetary magnetospheres.
-
+Research in space plasma physics, with a focus on the dynamics in planetary magnetospheres. This includes the study of the interaction between solar wind and planetary magnetospheres, as well as the investigation of plasma processes in these environments.
 /*== Experience
 
 - *1983--Present*: Founder & Publisher, Graphics Press. Independent publishing house specializing in information design and data visualization.

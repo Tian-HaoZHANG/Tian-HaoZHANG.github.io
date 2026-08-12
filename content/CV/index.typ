@@ -6,10 +6,6 @@
 )
 #import "@preview/citegeist:0.3.1": load-bibliography
 
-
-
-
-
 = Tian-Hao Zhang (张天昊)
 
 #tufted.margin-note[
@@ -20,7 +16,7 @@
 
 #link("CV-PDF.pdf")[[Click here for a PDF version]]
 
-Research in space plasma physics, with a focus on the dynamics concerning with planetary magnetospheres.
+Research in space plasma physics, with a focus on the dynamics in planetary magnetospheres. This includes the study of the interaction between solar wind and planetary magnetospheres, as well as the investigation of plasma processes in these environments.
 
 /*== Experience
 

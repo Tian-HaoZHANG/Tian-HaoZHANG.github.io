@@ -26,13 +26,13 @@ body {
 }
 
 /* Main content fills remaining space */
-body > article {
+body>article {
 	flex: 1 0 auto;
 	padding: 4.5rem 0 1.5rem;
 }
 
 /* Footer stays at bottom */
-body > footer {
+body>footer {
 	margin-top: auto;
 	flex-shrink: 0;
 }
@@ -57,29 +57,29 @@ img[loading="lazy"] {
 */
 
 /* 1. Content centered in the main text column (55% width) */
-section > img,
-section > svg {
+section>img,
+section>svg {
 	max-width: 55%;
 	position: relative;
 	left: 27.5%;
 	transform: translateX(-50%);
 }
 
-section > img,
-section > svg {
+section>img,
+section>svg {
 	display: block;
 }
 
 /* 2. Content centered in figures (100% of figure width) */
-section > figure:not(.fullwidth) > img,
-section > figure:not(.fullwidth) > svg {
+section>figure:not(.fullwidth)>img,
+section>figure:not(.fullwidth)>svg {
 	max-width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-section > figure:not(.fullwidth) > img,
-section > figure:not(.fullwidth) > svg {
+section>figure:not(.fullwidth)>img,
+section>figure:not(.fullwidth)>svg {
 	display: block;
 }
 
@@ -114,13 +114,13 @@ MATH NOTATION
 	overflow-y: hidden;
 }
 
-figure > .math-block {
+figure>.math-block {
 	width: 100%;
 	margin: 0 auto;
 	max-width: 100%;
 }
 
-.fullwidth > .math-block {
+.fullwidth>.math-block {
 	width: 100%;
 	margin: 1em auto;
 	max-width: 100%;
@@ -199,17 +199,17 @@ figure > .math-block {
 	opacity: 1;
 }
 
-.math-inline > math,
-.math-block > math {
+.math-inline>math,
+.math-block>math {
 	color: inherit;
 }
 
-.math-inline > svg,
-.math-block > svg {
+.math-inline>svg,
+.math-block>svg {
 	display: inline-block;
 }
 
-.math-block > svg {
+.math-block>svg {
 	min-width: max-content;
 	text-align: center;
 }
@@ -322,7 +322,7 @@ pre {
 }
 
 /* Code within pre */
-pre > code {
+pre>code {
 	width: 95%;
 	font-size: 1.2rem;
 	line-height: 1.5;
@@ -455,7 +455,7 @@ table {
 }
 
 /* Naked tables behave like the main text column */
-section > table {
+section>table {
 	width: auto;
 	position: relative;
 	left: 27.5%;
@@ -493,7 +493,7 @@ table tbody tr:hover {
 	}
 
 	/* Reset naked table positioning on mobile */
-	section > table {
+	section>table {
 		left: 0;
 		transform: none;
 		margin: 1.5em auto;
@@ -537,11 +537,11 @@ RESPONSIVE LAYOUT
 	}
 
 	/* Footnote margin notes collapse by default */
-	.footnote-ref + .marginnote {
+	.footnote-ref+.marginnote {
 		display: none;
 	}
 
-	.footnote-ref + .marginnote.is-expanded {
+	.footnote-ref+.marginnote.is-expanded {
 		display: block;
 	}
 
@@ -559,7 +559,7 @@ RESPONSIVE LAYOUT
 		top: -0.2em;
 	}
 
-	sup.footnote-ref > a.footnote-ref-link {
+	sup.footnote-ref>a.footnote-ref-link {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -577,7 +577,7 @@ RESPONSIVE LAYOUT
 		cursor: pointer;
 	}
 
-	sup.footnote-ref > a.footnote-ref-link.is-expanded {
+	sup.footnote-ref>a.footnote-ref-link.is-expanded {
 		background: var(--highlight-weak);
 	}
 
@@ -597,8 +597,8 @@ RESPONSIVE LAYOUT
 	}
 
 	/* Full-width tables and images on mobile */
-	section > img,
-	section > svg {
+	section>img,
+	section>svg {
 		max-width: 100%;
 		left: 0;
 		transform: none;
@@ -644,7 +644,7 @@ header nav {
 	gap: 1em;
 }
 
-header nav > p {
+header nav>p {
 	display: flex;
 	gap: inherit;
 	margin: 0;
@@ -681,7 +681,7 @@ sup.footnote-ref {
 }
 
 .footnote-ref,
-.footnote-ref + .marginnote {
+.footnote-ref+.marginnote {
 	--highlight: transparent;
 	background-color: var(--highlight);
 	box-shadow: 0 0 0 5px var(--highlight);
@@ -692,7 +692,7 @@ sup.footnote-ref {
 }
 
 /* Highlight margin note when footnote reference is hovered */
-.footnote-ref:hover + .marginnote {
+.footnote-ref:hover+.marginnote {
 	--highlight: var(--highlight-weak);
 	transition-delay: 0s;
 }
