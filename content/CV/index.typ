@@ -1,10 +1,10 @@
 #import "../index.typ": template, tufted
 #show: template.with(
-  title: "Edward R. Tufte",
-  description: "CV of Edward R. Tufte",
+  title: "Tian-Hao Zhang (张天昊)",
+  description: "CV of Tian-Hao Zhang (张天昊)",
   lang: "en",
 )
-#import "@preview/citegeist:0.2.2": load-bibliography
+#import "@preview/citegeist:0.3.1": load-bibliography
 
 
 
