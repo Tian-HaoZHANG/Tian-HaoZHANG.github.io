@@ -1,4 +1,6 @@
 #let template-refs(content) = {
+  show ref: set text(fill: rgb(0, 0, 255))
+
   show ref: it => {
     // Aliases
     let eq = math.equation

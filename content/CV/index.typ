@@ -6,9 +6,7 @@
 )
 #import "@preview/citegeist:0.2.2": load-bibliography
 
-#show link: underline//网址#link("")加下划线
-#show link: set text(fill: rgb(0, 0, 255))
-#show ref: set text(fill: rgb(0, 0, 255))
+
 
 
 
@@ -17,7 +15,7 @@
 #tufted.margin-note[
   A PhD student majoring in space plasma physics at Peking University, Beijing, China \
   Website: #link("https://tian-haozhang.github.io/")\
-  Email: #link("mailto:1169112205@qq.com")
+  Email: #link("mailto:thzhang@stu.pku.edu.cn")
 ]
 
 #link("CV-PDF.pdf")[[Click here for a PDF version]]

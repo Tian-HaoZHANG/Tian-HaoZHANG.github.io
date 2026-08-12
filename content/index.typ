@@ -1,8 +1,5 @@
 #import "../config.typ": template, tufted
 #show: template
-#show link: underline//网址#link("")加下划线
-#show link: set text(fill: rgb(0, 0, 255))
-#show ref: set text(fill: rgb(0, 0, 255))
 
 
 // tufted.margin-note 可以让你在边栏中放置内容

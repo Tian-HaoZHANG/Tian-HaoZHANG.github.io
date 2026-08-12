@@ -1,4 +1,5 @@
 #let template-links(content) = {
+  show link: set text(fill: rgb(0, 0, 255))
   // Open external links and non-web resources in a new tab
   show link: it => {
     if type(it.dest) == str {

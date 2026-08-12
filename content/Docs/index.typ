@@ -4,9 +4,6 @@
   description: "Docs",
 )
 
-#show link: underline//网址#link("")加下划线
-#show link: set text(fill: rgb(0, 0, 255))
-#show ref: set text(fill: rgb(0, 0, 255))
 
 = Documents
 

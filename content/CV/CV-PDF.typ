@@ -5,7 +5,7 @@
 
 #import "@preview/citegeist:0.3.1": load-bibliography
 #set page(paper: "a4")
-#show link: underline//网址#link("")加下划线
+#show link: underline //网址#link("")加下划线
 #show link: set text(fill: rgb(0, 0, 255))
 #show ref: set text(fill: rgb(0, 0, 255))
 
@@ -17,7 +17,7 @@
 
 Website: #link("https://tian-haozhang.github.io/")
 #h(3em)
-Email: #link("mailto:1169112205@qq.com")
+Email: #link("mailto:thzhang@stu.pku.edu.cn")
 
 Research in space plasma physics, with a focus on the dynamics concerning with planetary magnetospheres.
 
