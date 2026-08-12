@@ -9,6 +9,9 @@
 #show link: set text(fill: rgb(0, 0, 255))
 #show ref: set text(fill: rgb(0, 0, 255))
 
+// 中文伪粗体
+#import "@preview/cuti:0.4.0": show-cn-fakebold
+#show: show-cn-fakebold
 
 = Tian-Hao Zhang (#text(font: "STSong")[张天昊])
 
