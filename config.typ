@@ -24,7 +24,7 @@
   /// 站点的根 URL (例如 "https://example.com")。用于生成 Canonical URL 元数据。（可选）
   website-url: "https://tian-haozhang.github.io/",
   /// 网站的默认语言，例如 "zh" 或 "en"，默认为 "zh"。
-  lang: "en",
+  lang: "zh",
   /// 订阅源配置 (字符串数组)，指定包含在 RSS 订阅源中的内容目录列表。（可选）
   /// 例如，`("/Blog/",)` 会将 `Blog` 目录下的所有文章包含在订阅源中。
   feed-dir: ("/Blog/",),
