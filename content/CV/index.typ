@@ -6,35 +6,31 @@
 )
 #import "@preview/citegeist:0.2.2": load-bibliography
 
-= Edward R. Tufte
+#show link: underline//网址#link("")加下划线
+#show link: set text(fill: rgb(0, 0, 255))
+#show ref: set text(fill: rgb(0, 0, 255))
+
+
+
+= Tian-Hao Zhang (张天昊)
 
 #tufted.margin-note[
-  Statistician, Artist, and Professor Emeritus \
-  Website: #link("https://www.edwardtufte.com")[edwardtufte.com] \
-  Email: #link("mailto:noreply@edwardtufte.com", "noreply@edwardtufte.com")
+  A PhD student majoring in space plasma physics at Peking University, Beijing, China \
+  Website: #link("https://tian-haozhang.github.io/")\
+  Email: #link("mailto:1169112205@qq.com")
 ]
 
 #link("CV-PDF.pdf")[[Click here for a PDF version]]
 
-Research in statistical evidence and analytical design for information visualization, integrating principles from statistics, graphic design, and cognitive science for the effective presentation of quantitative data.
+Research in space plasma physics, with a focus on the dynamics concerning with planetary magnetospheres.
 
-== Experience
+/*== Experience
 
 - *1983--Present*: Founder & Publisher, Graphics Press. Independent publishing house specializing in information design and data visualization.
 - *1977--1999*: Professor Emeritus, Yale University. Departments of Political Science, Statistics, and Computer Science.
 - *1967--1977*: Instructor, Princeton University. Woodrow Wilson School of Public and International Affairs.
 
-== Artworks
 
-#tufted.margin-note[
-  #image("escaping-flatland.webp")
-]
-
-#tufted.margin-note[
-  A homage to Edward R. Tufte's large stainless steel sculpture titled _Escaping Flatland_
-]
-
-Founder of Hogpen Hill Farms, a 234-acre sculpture park in Woodbury, Connecticut. Creator of large-scale works including _Larkin’s Twig_ and the _Escaping Flatland_ series, exhibited at the Aldrich Contemporary Art Museum.
 
 == Research Contributions
 
@@ -48,7 +44,7 @@ Development of sparklines, a method for embedding high-resolution data graphics 
     #let data = item.fields
     - #strong(data.year): #emph(data.title)
   ]
-}
+}*/
 
 == Papers
 
@@ -63,6 +59,4 @@ Development of sparklines, a method for embedding high-resolution data graphics 
 
 == Education
 
-- PhD in Political Science: Yale University (1968).
-- MS in Statistics: Stanford University.
-- BS in Statistics: Stanford University.
+- BS in Physics: Peking University (2026).

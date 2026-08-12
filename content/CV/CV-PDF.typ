@@ -4,19 +4,24 @@
 // 注意网页样式与 PDF 样式无关；此文件只控制 pdf 的显示效果
 
 #import "@preview/citegeist:0.3.1": load-bibliography
-#set page(height: auto)
-#show link: it => underline(it)
+#set page(paper: "a4")
+#show link: underline//网址#link("")加下划线
+#show link: set text(fill: rgb(0, 0, 255))
+#show ref: set text(fill: rgb(0, 0, 255))
 
 = Tian-Hao Zhang (张天昊)
-#text(weight: "regular", size: 0.9em)[PhD student majoring in space plasma physics at Peking University, China]
+#text(
+  weight: "regular",
+  size: 0.9em,
+)[A PhD student majoring in space plasma physics at Peking University, Beijing, China]
 
-Website: #link("https://tian-haozhang.github.io/")[tian-haozhang.github.io]
+Website: #link("https://tian-haozhang.github.io/")
 #h(3em)
 Email: #link("mailto:1169112205@qq.com")
 
-Research in statistical evidence and analytical design for information visualization, integrating principles from statistics, graphic design, and cognitive science for the effective presentation of quantitative data.
+Research in space plasma physics, with a focus on the dynamics concerning with planetary magnetospheres.
 
-== Experience
+/*== Experience
 
 - *1983--Present*: Founder & Publisher, Graphics Press. Independent publishing house specializing in information design and data visualization.
 - *1977--1999*: Professor Emeritus, Yale University. Departments of Political Science, Statistics, and Computer Science.
@@ -35,7 +40,7 @@ Development of sparklines, a method for embedding high-resolution data graphics 
     - #strong(data.year): #emph(data.title)
   ]
 }
-
+*/
 == Papers
 
 #{
