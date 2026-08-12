@@ -481,12 +481,12 @@ Typst is not only a markup typesetting language, but also a programmable typeset
 ]
 
 ```typ
-#show "Latex": "Typst"
-I love Latex!
+#show "LaTeX": "Typst"
+I love LaTeX!
 ```
 
-#show "Latex": "Typst"
-I love Latex!
+#show "LaTeX": "Typst"
+I love LaTeX!
 
 ```typ
 // Custom functions are supported
