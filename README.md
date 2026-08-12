@@ -46,11 +46,11 @@
   ↓
 修改 .typ 文件
   ↓
-运行 build.py
+python build.py build
   ↓
-本地预览（preview）
+本地预览 python build.py preview
   ↓
-满意后 git push 到你的 GitHub 仓库
+满意后 git add ., commit, push 到你的 GitHub 仓库
   ↓
 GitHub Actions 自动部署
   ↓
