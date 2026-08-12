@@ -13,7 +13,7 @@
 = Tian-Hao Zhang (张天昊)
 
 #tufted.margin-note[
-  A PhD student majoring in space plasma physics at Peking University, Beijing, China \
+  A PhD student majoring in space plasma physics at Peking University, Beijing, China\
   Website: #link("https://tian-haozhang.github.io/")\
   Email: #link("mailto:thzhang@stu.pku.edu.cn")
 ]
