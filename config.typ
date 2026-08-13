@@ -1,16 +1,17 @@
 #import "tufted-lib/tufted.typ" as tufted
 
-/// 在 `config.typ` 中配置全局模板配置 template
-/// 之后的每个页面都会从上个页面导入这个模板函数
-/// 在每个具体页面中，都可以通过 `#show: template` 来应用模板
-/// 也可以通过 `template.with(...)` 来覆盖某些配置项，从而为某个页面定制参数
+// 在 `config.typ` 中配置全局模板配置 template
+// 之后的每个页面都会从上个页面导入这个模板函数
+// 在每个具体页面中，都可以通过 `#show: template` 来应用模板
+// 也可以通过 `template.with(...)` 来覆盖某些配置项，从而为某个页面定制参数
 #let template = tufted.tufted-web.with(
-  /// 网站顶部导航栏的链接字典。格式为 `("链接地址": "显示名称")`。
-  // 例如，如果你想添加一个 Entry 页，你需要添加 `"/Entry/": "Entry"`
-  // 然后在 `content/` 路径中新建 `Entry/`路径，在其中添加 `index.typ` 作为 Entry 页的内容
+  // 网站顶部导航栏的链接字典，格式为 `("链接地址": "显示名称")`
+  /* 例如，如果你想添加一个 Entry 页，你需要添加在 header-links 中添加 `"/Entry/": "Entry"`
+  然后在 `content/` 路径中新建 `Entry/`路径
+  并且在`content/Entry/` 路径中添加 `index.typ` 作为 Entry 页的内容 ('index.typ' 的写法参考已经存在的例子) */
   header-links: (
     "/": "Home",
-    "/Archive/": "Archive",
+    "/Docs/": "Docs",
     "/Blog/": "Blog",
     "/Essay/": "Essay",
     "/CV/": "CV",

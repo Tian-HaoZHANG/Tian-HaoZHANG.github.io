@@ -1,11 +1,11 @@
 #import "../index.typ": template, tufted
 #show: template.with(
-  title: "Archives",
-  description: "Archives",
+  title: "Docs",
+  description: "Docs",
 )
 
 
-= Archives
+= Archive
 
 - #link(
     "waves and instabilities in plasmas 20260810.pdf",
