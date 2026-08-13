@@ -12,11 +12,6 @@
 == 2025
 
 #tufted.blog-entry(
-  date: datetime(year: 2025, month: 10, day: 30),
-  path: "2025-10-30-normal-distribution/",
-  title: "Normal Distribution",
-)
-#tufted.blog-entry(
   date: datetime(year: 2025, month: 4, day: 16),
   path: "2025-04-16-monkeys-apes",
   title: "Monkeys vs Apes",

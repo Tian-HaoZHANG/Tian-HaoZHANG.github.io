@@ -10,8 +10,9 @@
   // 然后在 `content/` 路径中新建 `Entry/`路径，在其中添加 `index.typ` 作为 Entry 页的内容
   header-links: (
     "/": "Home",
-    "/Docs/": "Docs",
+    "/Archive/": "Archive",
     "/Blog/": "Blog",
+    "/Essay/": "Essay",
     "/CV/": "CV",
   ),
 
