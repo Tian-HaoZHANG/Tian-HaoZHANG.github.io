@@ -14,7 +14,7 @@
 #tufted.blog-entry(
   date: datetime(year: 2025, month: 4, day: 16),
   path: "2025-04-16-monkeys-apes",
-  title: "Monkeys vs Apes",
+  title: "Example from template 2",
 )
 
 == 2024
@@ -22,5 +22,5 @@
 #tufted.blog-entry(
   date: "2024-10-04",
   path: "2024-10-04-iterators-generators/",
-  title: "Iterators vs Generators in Python",
+  title: "Example from template 1",
 )

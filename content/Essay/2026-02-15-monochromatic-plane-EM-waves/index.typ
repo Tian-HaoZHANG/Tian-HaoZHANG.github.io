@@ -6,7 +6,8 @@
 #set math.equation(supplement: [Eq.])
 
 #let title = "On the monochromatic plane electromagnetic waves"
-#let description = "Notes on the monochromatic plane wave and its polarization, cf. Xiong-Jun Liu's lecture notes."
+#let description = "Notes on the monochromatic plane wave and its polarization."
+#let ref = "Ref: Xiong-Jun Liu (刘雄军)'s lecture notes."
 #show: template.with(
   title: title,
   description: description,
@@ -15,7 +16,8 @@
 )
 
 = #title
-#description
+#description\
+#ref
 
 == Plane waves
 Work in geometrized Gaussian unit ststem, Maxwell equations are $ nabla dot bm(E) = 0, nabla times bm(B) - (partial bm(E))/(partial t) = bm(0), \
