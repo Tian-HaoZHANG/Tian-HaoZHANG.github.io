@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+  <!-- 白色背景 -->
+  <rect width="64" height="64" fill="#ffffff" />
+  
+  <!-- T 的波浪横杠：对称格式，使用更光滑的正弦波近似（控制点外推至 4/3 幅值处） -->
+  <path d="M 12,18.333 
+           C 14,7.666 16,7.666 18,18.333 
+           C 20,29 22,29 24,18.333 
+           C 25.333,7.666 26.667,7.666 28,18.333 
+           C 30,29 32,29 34,18.333 
+           C 36,7.666 38,7.666 40,18.333" 
+        fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- T 的竖杠 -->
+  <line x1="28" y1="18.333" x2="28" y2="56.333" stroke="#000000" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- T 竖杠顶部的向下箭头，尖端位于竖杠与正弦波交点处 -->
+  <polygon points="28,18.333 24,30.333 32,30.333" fill="#000000" />
+  
+  <!-- H 字母（粗体，表示磁场） -->
+  <path d="M 42,32.333 L 42,52.333 M 52,32.333 L 52,52.333 M 42,42.333 L 52,42.333" 
+        stroke="#000000" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- 粒子点（黄色，位于波浪右侧第一个波峰上，体现波-粒子相互作用） -->
+  <circle cx="18" cy="16.333" r="2.5" fill="#f0c040"/>
+</svg>
