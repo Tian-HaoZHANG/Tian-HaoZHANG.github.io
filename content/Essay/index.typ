@@ -1,14 +1,26 @@
 #import "../index.typ": template, tufted
 #show: template.with(
   title: "Essay",
-  description: "An essay (short blog) example",
+  description: "Short blogs.",
 )
 
 
 = Essay
 
-//中文博客样例可参考 #link("https://yousa-mirage.github.io/Blog")[我的个人网站]。
+
 == 2026
+
+#tufted.blog-entry(
+  date: datetime(year: 2026, month: 6, day: 10),
+  path: "2026-06-10-quaternion-in-space-data-analysis/",
+  title: "四元数在空间数据处理中的应用",
+)
+
+#tufted.blog-entry(
+  date: datetime(year: 2026, month: 6, day: 7),
+  path: "2026-06-07-saddle-point-method/",
+  title: "The saddle point method",
+)
 
 #tufted.blog-entry(
   date: datetime(year: 2026, month: 4, day: 8),
@@ -23,6 +35,12 @@
 )
 
 == 2025
+
+#tufted.blog-entry(
+  date: datetime(year: 2025, month: 11, day: 30),
+  path: "2025-11-30-derivatives-of-integeration-regions/",
+  title: "积分区域的导数",
+)
 
 #tufted.blog-entry(
   date: datetime(year: 2025, month: 10, day: 30),

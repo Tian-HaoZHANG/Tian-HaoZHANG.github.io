@@ -170,7 +170,8 @@ $
   => omega' = omega - bm(k) dot bm(u),
 $
 where $omega$ is the angular-frequency measured by the illuminant and $omega'$ by the observer, $bm(u)$ is the velocity of the observer relative to the illuminant.
-#pagebreak()
+
+- In space data analysis, let $omega_"sc"$ and $bm(V)$ be the angular-frequency of the wave and the bulk velocity of the plasma as observed by the spacecraft, respectively, then the angular-frequency in the plasma frame is $omega_"pl" = omega_"sc" - bm(k) dot bm(V).$
 
 == Electrostatic waves
 
@@ -186,4 +187,4 @@ $
   bm(E)_bm(k)(bm(x), t) & = uv(k) E_0(bm(k)) exp(ii(bm(k) dot bm(x) - omega(bm(k))t)) \
                         & = uv(k) E_0(bm(k)) exp(gamma(bm(k)) t) exp(ii(bm(k) dot bm(x) - omega_rm(r) (bm(k))t)),
 $
-where $E_0(bm(k)) in CC$ is determined by solving the linear system (including boundary and initial conditions). This is sometimes referred to as the "plane wave ansatz." Note that if the coupling is non-linear (as is generally the case), then the most general solution need not possess a monochromatic plane wave form (although we could always try to search for solutions of this form).#footnote[The essence of "plane wave ansatz", or the "superposition principle" in linear systems, is two fold: First, the physical quantity under consideration can be decomposed into Fourier modes — we can always do this with aid of the mathematical Fourier theory. Second each Fourier mode evolves independently, and there is no interaction between any two of the modes — this is a consequence of linearity. Note, however, that if there exist non-linear phenomena, then different Fourier modes will indeed couple and cannot be solved independently. In such systems, for example, a pertubation with angular-frequency $omega$ might excite frequency multiplications $2 omega, 3 omega, dots.c.$]
+where $E_0(bm(k)) in CC$ is determined by solving the linear system (including boundary and initial conditions). This is sometimes referred to as the "plane wave ansatz." Note that if the coupling is non-linear (as is generally the case), then the most general solution need not possess a monochromatic plane wave form (although we could always try to search for solutions of this form).#footnote[The essence of the "plane wave ansatz", or the "superposition principle" in linear systems, is two fold. On the one hand, the physical quantity under consideration can be decomposed into Fourier modes — we can always do this with aid of the mathematical Fourier theory. On the other hand, each Fourier mode evolves independently, and there is no interaction between any two of the modes — this is a consequence of linearity. Note, however, that if there exist non-linear phenomena, then different Fourier modes will indeed couple and cannot be solved independently. In such systems, for example, a pertubation with angular-frequency $omega$ might excite frequency multiplications $2 omega, 3 omega, dots.c.$]

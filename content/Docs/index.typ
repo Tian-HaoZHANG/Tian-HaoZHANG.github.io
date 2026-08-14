@@ -8,7 +8,12 @@
 = Archive
 
 - #link(
-    "waves and instabilities in plasmas 20260810.pdf",
+    "cold_plasma_dielectric_tensor.png",
+    "Cold plasma dielectric tensor",
+  )
+
+- #link(
+    "waves and instabilities in plasmas 20260814.pdf",
     "Liu Chen (陈骝)'s textbook《Waves and Instabilities in Plasmas》— retypesetted",
   )
 
