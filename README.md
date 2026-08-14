@@ -33,7 +33,7 @@
 
 ## 环境准备
 
-本项目只依赖 Typst 和 Python（推荐使用 uv 配置 Python），其中Typst 用于编译网页，Python 脚本用于自动化构建流程。
+本项目只依赖 Typst 和 Python（推荐使用 uv 配置 Python，但裸 Python 也可），其中Typst 用于编译网页，Python 脚本用于自动化构建流程。
 
 ## 日常使用流程
 
@@ -42,18 +42,20 @@
 ```plaintext
 使用本模板创建你的 GitHub 仓库 
   ↓
-将你的仓库克隆到本地
+将你刚刚创建的仓库克隆到本地
   ↓
 按自己的意愿，参考模板修改 .typ 文件
   ↓
 命令行输入 python build.py build 增量编译
+（使用 -f/--force 选项强制完整重建）
   ↓
 命令行输入 python build.py preview 本地预览查看效果
 （推荐另开一个终端）
   ↓
-满意后命令行输入 git add ., commit, push 到你的 GitHub 仓库
+满意后依次命令行输入 git add ., git commit
+和 git push (push 时连接 Clash VPN)
   ↓
-GitHub Actions 自动部署至 username.github.io 
+GitHub Actions 自动构建、部署至 <username>.github.io 
 ```
 
 ## 📂 项目结构

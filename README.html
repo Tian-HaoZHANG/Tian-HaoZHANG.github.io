@@ -3854,23 +3854,25 @@ body,
 <li>丰富的示例和文档，无需任何前置知识，<a href="https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/Typst-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99">简单学习 Typst</a> 后即可开始编写</li>
 </ul>
 <h2 id="环境准备">环境准备</h2>
-<p>本项目只依赖 Typst 和 Python（推荐使用 uv 配置 Python），其中Typst 用于编译网页，Python 脚本用于自动化构建流程。</p>
+<p>本项目只依赖 Typst 和 Python（推荐使用 uv 配置 Python，但裸 Python 也可），其中Typst 用于编译网页，Python 脚本用于自动化构建流程。</p>
 <h2 id="日常使用流程">日常使用流程</h2>
 <p>整个模板工作流程如下所示：</p>
 <pre><code class="language-plaintext">使用本模板创建你的 GitHub 仓库 
   ↓
-将你的仓库克隆到本地
+将你刚刚创建的仓库克隆到本地
   ↓
 按自己的意愿，参考模板修改 .typ 文件
   ↓
 命令行输入 python build.py build 增量编译
+（使用 -f/--force 选项强制完整重建）
   ↓
 命令行输入 python build.py preview 本地预览查看效果
 （推荐另开一个终端）
   ↓
-满意后命令行输入 git add ., commit, push 到你的 GitHub 仓库
+满意后依次命令行输入 git add ., git commit
+和 git push (push 时连接 Clash VPN)
   ↓
-GitHub Actions 自动部署至 username.github.io 
+GitHub Actions 自动构建、部署至 &lt;username&gt;.github.io 
 </code></pre>
 <h2 id="-项目结构">📂 项目结构</h2>
 <pre><code class="language-plaintext">Tufted-Blog-Template/
