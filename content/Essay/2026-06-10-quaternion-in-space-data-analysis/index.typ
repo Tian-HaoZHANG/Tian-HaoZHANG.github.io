@@ -4,8 +4,8 @@
 #import "../../../mod.typ": *
 // 如需生成 RSS feed，必须填写 title、description 和 date 元数据
 
-#let title = "四元数在空间数据处理中的应用"
-#let description = "四元数可以用来表示转动，空间数据处理中用来做坐标系转换。"
+#let title = "四元数在卫星数据处理中的应用"
+#let description = "四元数可以用来表示转动，卫星数据处理中用来做坐标系转换。"
 #let ref = "Ref: 我记得是 MMS 的一个说明文档，待补充。"
 #show: template.with(
   title: title,

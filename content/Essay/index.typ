@@ -13,7 +13,7 @@
 #tufted.blog-entry(
   date: datetime(year: 2026, month: 6, day: 10),
   path: "2026-06-10-quaternion-in-space-data-analysis/",
-  title: "四元数在空间数据处理中的应用",
+  title: "利用四元数进行卫星坐标系旋转变换",
 )
 
 #tufted.blog-entry(
@@ -44,6 +44,6 @@
 
 #tufted.blog-entry(
   date: datetime(year: 2025, month: 10, day: 30),
-  path: "2025-10-30-normal-distribution/",
+  path: "2025-10-30-example/",
   title: "Example from template",
 )
