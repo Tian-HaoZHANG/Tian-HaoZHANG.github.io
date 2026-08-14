@@ -28,14 +28,14 @@
 - 内置基于 Python 的跨平台构建脚本，支持增量编译
 - 支持生成 HTML 网页和 PDF 文档，支持链接到 PDF
 - 内置 GitHub Actions 工作流，一键部署网站
-- 支持浅色/深色模式自动选择和一键切换
+- 支持浅色/深色模式自动选择和一键切换 
 - 丰富的示例和文档，无需任何前置知识，[简单学习 Typst](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/Typst-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99) 后即可开始编写
 
 ## 环境准备
 
-本项目只依赖 Typst 和 Python（推荐使用 uv 配置 Python），Typst 用于编译网页，Python 脚本用于自动化构建流程。
+本项目只依赖 Typst 和 Python（推荐使用 uv 配置 Python），其中Typst 用于编译网页，Python 脚本用于自动化构建流程。
 
-## 快速开始
+## 日常使用流程
 
 整个模板工作流程如下所示：
 
@@ -44,98 +44,17 @@
   ↓
 将你的仓库克隆到本地
   ↓
-修改 .typ 文件
+按自己的意愿，参考模板修改 .typ 文件
   ↓
-python build.py build
+命令行输入 python build.py build 增量编译
   ↓
-本地预览 python build.py preview
+命令行输入 python build.py preview 本地预览查看效果
+（推荐另开一个终端）
   ↓
-满意后 git add ., commit, push 到你的 GitHub 仓库
+满意后命令行输入 git add ., commit, push 到你的 GitHub 仓库
   ↓
-GitHub Actions 自动部署
-  ↓
-访问 username.github.io
+GitHub Actions 自动部署至 username.github.io 
 ```
-
-### 1. 克隆项目
-
-1. 点击本页面右上角的绿色按钮 [Use this template] -> Create a new repository，将这个模板复制到你自己的仓库中，**（非常重要）并将仓库命名为 `<your-github-username>.github.io`**。
-2. 将你自己的仓库代码克隆到你的电脑上。首先你需要选择一个文件夹作为你的工作目录，然后**在该路径下**打开终端，运行以下命令（将 `<your-github-username>` 替换为你的 GitHub 用户名）：
-
-```bash
-git clone https://github.com/<your-github-username>/<your-github-username>.github.io.git
-```
-
-例如，如果我想要在 `D:\My-Website\` 目录下存放网站项目，则首先进入 `D:\`，在该路径下打开终端，然后运行：
-
-```bash
-git clone https://github.com/Yousa-Mirage/Yousa-Mirage.github.io.git
-```
-
-这会创建 `D:\Yousa-Mirage.github.io\` 文件夹，并将项目文件下载到该目录下。接下来你可以重命名该文件夹为你喜欢的名字，例如 `D:\My-Website\`。这就是我们以后的本地网站项目目录，我们将在其中编辑文档、运行构建脚本、与 GitHub 远程仓库相联系。
-
-### 2. 构建网站
-
-进入你的网站项目目录，**在当前路径下**打开终端并运行以下命令：
-
-```bash
-uv run build.py build
-```
-
-如果你没有安装 uv，也可以直接使用 Python 运行脚本：
-
-```bash
-python build.py build
-```
-
-此命令会将 `content/` 下的 `.typ` 文件对应编译为 HTML 文件，并输出到 `_site/` 目录。`_site/` 目录就是你的网站在本地的样子。在你修改文件后，重新运行该命令即可**增量编译**。
-
-### 3. 本地预览
-
-> HTTP 服务器会占用当前终端窗口，因此推荐在该路径下打开一个新的终端窗口运行预览命令。
->
-> 💡 **快速工作流提示**：你可以在一个终端后台运行 `uv run build.py preview`，然后在另一个终端运行 `uv run build.py build` 来编译修改。网页会自动刷新，从而实现实时预览而不需要反复运行 `preview` 命令重启服务器。
-
-你可以运行以下命令启动本地预览服务器：
-
-```bash
-uv run build.py preview
-
-# 或者直接使用 Python 运行
-python build.py preview
-```
-
-<details>
-<summary>预览命令说明</summary>
-
-`preview` 会首先尝试运行 `uvx livereload _site`，这个命令使用 uv 运行了一个叫做 livereload 的工具，livereload 将 `_site/` 目录作为网站根目录，并在本地的 8000 端口启动 HTTP 实时服务器。如果你没有安装 uv，则会回退到使用 Python 内置的 HTTP 服务器：`python -m http.server 8000 --directory _site`。
-
-预览服务器默认使用 `8000` 端口，你可以使用 `-p/--port` 参数指定其他端口，例如：
-
-```bash
-uv run build.py preview -p 12345
-```
-
-</details>
-
-浏览器应该会自动打开，或者你可以手动打开浏览器，访问 `http://localhost:8000` 来查看默认网页。我在默认网页（即`content/` 中的内容）中编写了更多文档说明和示例内容，你可以自行探索和修改。
-
-你看到的本地网站内容应该与 [示例网站](https://little-yousa-mirage.github.io/) 完全相同。
-
-你可以参考 [Wiki 页](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/Typst-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99) 的内容和资料了解和学习 Typst。
-
-### 4. 使用 Typst 编写网页与部署网站
-
-在了解网页结构和如何编写后，你就可以将 `content/` 中的内容替换为你自己的内容，从而搭建你自己的网站。
-
-1. **修改配置**：编辑 `config.typ` 设置网站标题和导航栏，还可以在 `assets/` 下放置一个 `favicon.ico` 文件作为你网站的标签页图标。
-2. **添加文章**：在 `content/` 下创建新的 `.typ` 文件，可以参考目前的 `content/` 获得示例。
-3. **生成 PDF**：如果文件名中包含 `PDF` (如 `CV-PDF.typ`)，构建脚本会自动将其编译为 PDF 文件，此时你可以在网页中添加链接指向该 PDF。
-4. **部署网站**：在你的 GitHub 仓库中**将 Pages 的 `Build and deployment > Source` 设置为 `GitHub Actions`**，然后将修改后的内容推送到 GitHub，GitHub Actions 会自动构建、部署、更新网站。具体内容可参考 [Wiki 页](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/GitHub-Pages-%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99)。
-
-### 5. 项目更新
-
-本模板提供一个 `Update` GitHub Actions 工作流，用于从上游模板仓库（也就是本仓库）导入功能更新，具体内容请参考 [Wiki 页](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki/更新项目)。
 
 ## 📂 项目结构
 

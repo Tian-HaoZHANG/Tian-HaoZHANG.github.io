@@ -31,6 +31,7 @@ Tufted Blog Template 构建脚本
     python build.py build
     python build.py build --force
     python build.py preview -p 3000
+    ...
 """
 
 import argparse
@@ -276,7 +277,11 @@ def find_typ_dependencies(typ_file: Path) -> set[Path]:
             # 规范化路径，只追踪 .typ 文件
             try:
                 dep_path = dep_path.resolve()
-                if dep_path.exists() and dep_path.suffix == ".typ" and is_dep_file(dep_path):
+                if (
+                    dep_path.exists()
+                    and dep_path.suffix == ".typ"
+                    and is_dep_file(dep_path)
+                ):
                     dependencies.add(dep_path)
             except Exception:
                 pass
@@ -316,7 +321,9 @@ def get_all_dependencies(typ_file: Path, visited: set[Path] | None = None) -> se
     return all_deps
 
 
-def needs_rebuild(source: Path, target: Path, extra_deps: list[Path] | None = None) -> bool:
+def needs_rebuild(
+    source: Path, target: Path, extra_deps: list[Path] | None = None
+) -> bool:
     """
     判断是否需要重新构建。
 
@@ -437,13 +444,17 @@ def run_typst_command(args: list[str]) -> bool:
         bool: 命令是否成功执行
     """
     try:
-        result = subprocess.run(["typst"] + args, capture_output=True, text=True, encoding="utf-8")
+        result = subprocess.run(
+            ["typst"] + args, capture_output=True, text=True, encoding="utf-8"
+        )
         if result.returncode != 0:
             print(f"  ❌ Typst 错误: {result.stderr.strip()}")
             return False
         return True
     except FileNotFoundError:
-        print("  ❌ 错误: 未找到 typst 命令。请确保已安装 Typst 并添加到 PATH 环境变量中。")
+        print(
+            "  ❌ 错误: 未找到 typst 命令。请确保已安装 Typst 并添加到 PATH 环境变量中。"
+        )
         print("  📝 安装说明: https://typst.app/open-source/#download")
         return False
     except Exception as e:
@@ -758,7 +769,14 @@ def preview(port: int = 8000, open_browser_flag: bool = True) -> bool:
     try:
         print("使用 Python 内置 http.server...")
         result = subprocess.run(
-            [sys.executable, "-m", "http.server", str(port), "--directory", str(SITE_DIR)],
+            [
+                sys.executable,
+                "-m",
+                "http.server",
+                str(port),
+                "--directory",
+                str(SITE_DIR),
+            ],
             check=False,
         )
         return result.returncode == 0
@@ -828,7 +846,9 @@ def get_feed_dirs() -> set[str]:
         match = re.search(r"feed-dir\s*:\s*\((.*?)\)", content, re.DOTALL)
         if match:
             return set(
-                c.strip("/") for c in re.findall(r'"([^"]*)"', match.group(1)) if c and c.strip("/")
+                c.strip("/")
+                for c in re.findall(r'"([^"]*)"', match.group(1))
+                if c and c.strip("/")
             )
     except Exception as e:
         print(f"⚠️ 解析 feed-dir 失败: {e}")
@@ -980,7 +1000,9 @@ def build_rss_xml(posts: list[dict], config: dict) -> str:
     ET.SubElement(channel, "link").text = config["site_url"]
     ET.SubElement(channel, "description").text = config["site_description"]
     ET.SubElement(channel, "language").text = config["lang"]
-    ET.SubElement(channel, "lastBuildDate").text = format_datetime(datetime.now(timezone.utc))
+    ET.SubElement(channel, "lastBuildDate").text = format_datetime(
+        datetime.now(timezone.utc)
+    )
 
     # 添加 atom:link 自链接
     atom_link = ET.SubElement(channel, f"{{{ATOM_NS}}}link")
@@ -1229,7 +1251,9 @@ def create_parser() -> argparse.ArgumentParser:
 """,
     )
 
-    subparsers = parser.add_subparsers(dest="command", title="可用命令", metavar="<command>")
+    subparsers = parser.add_subparsers(
+        dest="command", title="可用命令", metavar="<command>"
+    )
 
     build_parser = subparsers.add_parser("build", help="完整构建 (HTML + PDF + 资源)")
     build_parser.add_argument("-f", "--force", action="store_true", help="强制完整重建")
@@ -1286,7 +1310,9 @@ if __name__ == "__main__":
         case "clean":
             success = clean()
         case "preview":
-            success = preview(getattr(args, "port", 8000), getattr(args, "open_browser", True))
+            success = preview(
+                getattr(args, "port", 8000), getattr(args, "open_browser", True)
+            )
         case _:
             print(f"❌ 未知命令: {args.command}")
             success = False
