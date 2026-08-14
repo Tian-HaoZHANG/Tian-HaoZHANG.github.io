@@ -19,7 +19,7 @@ The normal distribution is completely defined by two parameters: the mean $mu$ a
 
 The probability density function is given by
 
-$ f(x) = 1/(sigma sqrt(2pi)) e^(-(x-mu)^2/(2sigma^2)). $
+$ f(x) = 1/(sqrt(2 pi) sigma) exp(-(x-mu)^2/(2sigma^2)). $
 
 This formula, developed by Gauss in his astronomical work @gauss1809theoria, has become foundational to modern statistics @stigler1982gauss.
 
