@@ -7,7 +7,7 @@
 
 #let title = "On the monochromatic plane electromagnetic waves"
 #let description = "Notes on the monochromatic plane wave and its polarization."
-#let ref = "Ref: Xiong-Jun Liu (刘雄军)'s lecture notes."
+#let ref = "Ref: Xiong-Jun Liu (刘雄军)'s lecture notes at Peking University, 2023 Autumn."
 #show: template.with(
   title: title,
   description: description,

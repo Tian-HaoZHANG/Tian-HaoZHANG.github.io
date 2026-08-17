@@ -19,7 +19,7 @@
 #tufted.blog-entry(
   date: datetime(year: 2026, month: 6, day: 7),
   path: "2026-06-07-saddle-point-method/",
-  title: "The saddle point method",
+  title: "Saddle point method in complex plane",
 )
 
 #tufted.blog-entry(

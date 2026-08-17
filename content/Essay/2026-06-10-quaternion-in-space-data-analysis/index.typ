@@ -1,26 +1,32 @@
 #import "../index.typ": template, tufted
-#import "@preview/lilaq:0.6.0" as lq
 // convinent math operations
 #import "../../../mod.typ": *
 // 如需生成 RSS feed，必须填写 title、description 和 date 元数据
 
-#let title = "四元数在卫星数据处理中的应用"
-#let description = "四元数可以用来表示转动，卫星数据处理中用来做坐标系转换。"
-#let ref = "Ref: 我记得是 MMS 的一个说明文档，待补充。"
+#let title = "利用四元数进行卫星坐标系旋转变换"
+#let description = "三维转动可以用四元数表示，卫星数据处理中用它来做坐标系旋转变换。"
+
 #show: template.with(
   title: title,
   description: description,
   date: datetime(year: 2026, month: 6, day: 10),
-  lang: "zh",
+  lang: "en",
 )
 
 = #title
 #description\
-#ref
+
+== 数学公式
+
+Ref: @book:李文威-代数学讲义.
 
 #image("quaternion_in_space_data_analysis.png")
 
-#figure(caption: "导入所需的 Python 库，尤其是阅读 cdf file 的库")[
+== Python 代码 - 使用 cdflib
+
+Ref: @website:cdflib-quick-start-guide.
+
+#figure(caption: "导入所需的 Python 库，尤其是阅读 cdf file 的库 cdflib")[
   ```Python
   import glob
   import numpy as np
@@ -200,10 +206,11 @@
     )
   )
 
-  # 打印得到的 dataset
+  # 保存所得 dataset 至他处，便于下一步使用
   data_to_write = np.column_stack(((time - time[0]).astype('float64') / 1e9, bcs_to_gse_0, bcs_to_gse_1, bcs_to_gse_2, bcs_to_gse_3))
   np.save('quat_bcs_to_gse.npy', data_to_write)
   ```
 ]
 
 
+#bibliography("refs.bib")

@@ -20,7 +20,7 @@
 
 = Docs from Template
 
-- #link("website-config/", "Website Configuration")
-- #link("custom-styling/", "Custom Styling")
-- #link("typst-example/", "Typst Example")
+- #link("website-config/", "Website configuration")
+- #link("custom-styling/", "Custom styling")
+- #link("typst-example/", "Typst example")
 
