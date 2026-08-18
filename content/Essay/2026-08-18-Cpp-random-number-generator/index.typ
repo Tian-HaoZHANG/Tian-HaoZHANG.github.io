@@ -17,6 +17,15 @@
 #description\
 Refs: @book:a-tour-of-cpp @website:cppreference.
 
+== Header files needed
+```cpp
+#include <random>
+#include <type_traits> // for std::is_arithmetic_v<>, std::conditional_t and std::is_floating_point_v<>
+#include <limits> // for std::numeric_limits<>
+#include <optional> // for std::optional<>
+#include <stdexcept> // for std::invalid_argument
+```
+
 == Uniform distribution
 
 ```cpp
