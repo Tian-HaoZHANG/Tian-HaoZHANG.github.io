@@ -127,11 +127,9 @@ public:
         current_state.sum_sq += current_state.current_value * current_state.current_value;
         return current_state.current_value;
     }
-    // 生成随机向量，保存到输入的 std::vector 中；这个函数并无封装价值，而且好像还不如 for 循环快
-    void generate_random_vector(std::vector<T>& v)
-    {
-        std::generate(v.begin(), v.end(), [&] { return (*this)(); });
-    }
+    // 生成随机向量，保存到输入的 Container（要求有迭代器）中；这个函数并无封装价值，而且好像还不如 for 循环快
+    template <typename Container>
+    void generate_random(Container& c) { std::generate(c.begin(), c.end(),[this] { return (*this)(); }); }
 
     // ---------- 状态查询 ----------
     // [[nodiscard]] 表示调用者不应忽略返回值；noexcept 表示函数不会抛出异常；被标记为 const 的函数不会修改调用它的对象 (即 *this, this 指针指向的对象) 的状态
@@ -294,11 +292,9 @@ public:
         current_state.sum_sq += current_state.current_value * current_state.current_value;
         return current_state.current_value;
     }
-    // 生成随机向量，保存到输入的 std::vector 中；这个函数并无封装价值，而且好像还不如 for 循环快
-    void generate_random_vector(std::vector<RealType>& v)
-    {
-        std::generate(v.begin(), v.end(), [&] { return (*this)(); });
-    }
+    // 生成随机向量，保存到输入的 Container（要求有迭代器）中；这个函数并无封装价值，而且好像还不如 for 循环快
+    template <typename Container>
+    void generate_random(Container& c) { std::generate(c.begin(), c.end(), [this] { return (*this)(); }); }
 
     // ---------- 状态查询 ----------
     // [[nodiscard]] 表示调用者不应忽略返回值；noexcept 表示函数不会抛出异常；被标记为 const 的函数不会修改调用它的对象 (即 *this, this 指针指向的对象) 的状态
