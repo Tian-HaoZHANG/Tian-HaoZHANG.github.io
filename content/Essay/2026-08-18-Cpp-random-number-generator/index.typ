@@ -15,7 +15,7 @@
 
 = #title
 #description\
-Refs: @website:博客园的一个教程 @book:a-tour-of-cpp @website:cppreference.
+Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a-tour-of-cpp @website:cppreference.
 
 == A minimum prototype
 ```cpp
@@ -396,7 +396,7 @@ int main()
     constexpr int N = 1000'0000;
     std::cout << "Statistics of " << N << " normally distributed doubles in [0, 1):\n";
 
-    random_number_generator::Rand_normal<double> r {0, 1};
+    Rand_normal<double> r {0, 1};
     for (int i = 0; i < N; ++i) r();
     double mean = r.get_mean();
     double sample_variance = r.get_sample_variance();
@@ -406,7 +406,7 @@ int main()
     r.seed(12345);
     std::cout << "\nAfter seed(12345), first value: " << r() << '\n';
 
-    random_number_generator::Rand_normal r2;
+    Rand_normal r2;
     r.seed(12345);
     r2.seed(12345);
     std::cout << "Seeding again, same first value: " << r() << " == " << r2() << '\n';
