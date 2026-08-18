@@ -21,15 +21,15 @@
   website-title: "Tian-Hao Zhang (张天昊)'s Homepage",
   /// 网站作者。用于生成 <meta name="author"> 标签。（可选）
   author: "Tian-Hao Zhang (张天昊)",
-  /// 网站描述。用于 SEO 搜索引擎摘要和社交媒体分享预览。（可选）
+  /// 网站描述。用于 SEO 搜索引擎摘要和社交媒体分享预览。（可选）可以在这里做一个简介，方便其他人搜索到你
   description: "Tian-Hao Zhang (张天昊)'s personal website",
   /// 站点的根 URL (例如 "https://example.com")。用于生成 Canonical URL 元数据。（可选）
   website-url: "https://tian-haozhang.github.io/",
   /// 网站的默认语言，例如 "zh" 或 "en"，默认为 "zh"; 这会影响，例如，参考文献写法的默认语言。
-  lang: "zh",
+  lang: "en",
   /// 订阅源配置 (字符串数组)，指定包含在 RSS 订阅源中的内容目录列表。（可选）
   /// 例如，`("/Blog/",)` 会将 `Blog` 目录下的所有文章包含在订阅源中。
-  feed-dir: ("/Blog/",),
+  feed-dir: ("/Blog/", "/Essay/"),
 
   /// 自定义页眉元素列表 (content 数组)。显示在页面顶部。
   header-elements: (
