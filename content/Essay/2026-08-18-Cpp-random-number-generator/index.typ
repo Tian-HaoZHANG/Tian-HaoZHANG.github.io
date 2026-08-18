@@ -15,20 +15,45 @@
 
 = #title
 #description\
-Refs: @book:a-tour-of-cpp @website:cppreference.
+Refs: @website:博客园的一个教程 @book:a-tour-of-cpp @website:cppreference.
 
-== Header files needed
+== A minimum prototype
 ```cpp
+#include <iostream>
 #include <random>
-#include <type_traits> // for std::is_arithmetic_v<>, std::conditional_t and std::is_floating_point_v<>
-#include <limits> // for std::numeric_limits<>
-#include <optional> // for std::optional<>
-#include <stdexcept> // for std::invalid_argument
+
+// 生成服从均匀分布的 double 随机数的 function object (functor)
+class Rand_uniform {
+public:
+    // 真随机数生产成本太高，因此我们以真随机数为种子，批量生产伪随机数
+    Rand_uniform(double low, double high) : dist {low, high} { re.seed(std::random_device {}()); } // 用 random_device 生成一个真随机种子
+    double operator()() { return dist(re); } // 播种后的引擎可以高效地产生伪随机数，dist 进而将其映射到均匀分布
+    // 这样定义以后，我们在使用时就可以通过 function call () 访问随机数
+    void seed(unsigned int s) { re.seed(s); } // 允许人为指定种子，便于复现随机数序列
+private:
+    std::mt19937 re; // 将 梅森绞扭器 (Mersenne Twister) 作为随机数引擎
+    std::uniform_real_distribution<double> dist; // 均匀分布
+};
+
+int main()
+{
+    Rand_uniform r {0.0, 1.0}; // 像定义变量一样定义一个随机数生成器对象 r
+    for (int i = 0; i < 10; ++i) {
+        std::cout << r() << "\n"; // 通过 function call () 访问随机数
+    }
+    std::cout << "\n";
+    return 0;
+}
 ```
 
 == Uniform distribution
 
 ```cpp
+#include <random>
+#include <type_traits> // for std::is_arithmetic_v<>, std::is_integral_v<> and std::conditional_t
+#include <limits> // for std::numeric_limits<>
+#include <optional> // for std::optional<>
+#include <stdexcept> // for std::invalid_argument
 // 理论上可以用均匀分布生成任意分布（涉及反函数，见概率论教材）
 // 生成服从均匀分布的随机数
 template<typename T = double, typename Engine = std::mt19937_64> // 模板参数：T 是生成的随机数类型，Engine 是随机数引擎类型
@@ -198,6 +223,11 @@ private:
 == Normal distribution
 
 ```cpp
+#include <random>
+#include <type_traits> // for std::is_floating_point_v<>
+#include <limits> // for std::numeric_limits<>
+#include <optional> // for std::optional<>
+#include <stdexcept> // for std::invalid_argument
 // 生成服从均匀分布的浮点随机数
 template<typename RealType = double, typename Engine = std::mt19937_64> // 模板参数：RealType 是生成的随机数类型，Engine 是随机数引擎类型
     requires std::is_floating_point_v<RealType>&& std::uniform_random_bit_generator<Engine> // 要求 RealType 是浮点类型，Engine 是符合概束 uniform_random_bit_generator 的随机数引擎
