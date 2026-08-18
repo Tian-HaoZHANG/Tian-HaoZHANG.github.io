@@ -11,6 +11,12 @@
 == 2026
 
 #tufted.blog-entry(
+  date: datetime(year: 2026, month: 8, day: 18),
+  path: "2026-08-18-Cpp-random-number-generator/",
+  title: "A C++ random number generator class",
+)
+
+#tufted.blog-entry(
   date: datetime(year: 2026, month: 6, day: 10),
   path: "2026-06-10-quaternion-in-space-data-analysis/",
   title: "利用四元数进行卫星坐标系旋转变换",
