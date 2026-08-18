@@ -21,6 +21,9 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 ```cpp
 #include <iostream>
 #include <random>
+#include <vector> // for std::vector
+#include <numeric> // for std::generate
+#include <algorithm> // for std::accumulate
 
 // 生成服从均匀分布的 double 随机数的 function object (functor)
 class Rand_uniform {
@@ -41,7 +44,11 @@ int main()
     for (int i = 0; i < 10; ++i) {
         std::cout << r() << "\n"; // 通过 function call () 访问随机数
     }
-    std::cout << "\n";
+
+    constexpr int N = 1000'0000;
+    std::vector<double> v(N, 0.0);
+    std::generate(v.begin(), v.end(), [&] { return r(); });
+    std::cout << "\nmean = " << std::accumulate(v.begin(), v.end(), 0.0) / double(N) << "\n";
     return 0;
 }
 ```
@@ -54,6 +61,8 @@ int main()
 #include <limits> // for std::numeric_limits<>
 #include <optional> // for std::optional<>
 #include <stdexcept> // for std::invalid_argument
+#include <vector> // for std::vector
+#include <numeric> // for std::generate
 // 理论上可以用均匀分布生成任意分布（涉及反函数，见概率论教材）
 // 生成服从均匀分布的随机数
 template<typename T = double, typename Engine = std::mt19937_64> // 模板参数：T 是生成的随机数类型，Engine 是随机数引擎类型
@@ -109,7 +118,7 @@ public:
         if (!current_state.current_seed) seed();
     }
 
-    // ---------- 核心生成器：通过 function call () 生成随机数 ----------
+    // ---------- 通过 function call () 访问随机数 ----------
     T operator()() noexcept
     {
         current_state.current_value = current_state.dist(current_state.re); // 摇一个随机数，保存到 current_value 中
@@ -117,6 +126,11 @@ public:
         current_state.sum += current_state.current_value;
         current_state.sum_sq += current_state.current_value * current_state.current_value;
         return current_state.current_value;
+    }
+    // 生成随机向量，保存到输入的 std::vector 中；这个函数并无封装价值，而且好像还不如 for 循环快
+    void generate_random_vector(std::vector<T>& v)
+    {
+        std::generate(v.begin(), v.end(), [&] { return (*this)(); });
     }
 
     // ---------- 状态查询 ----------
@@ -228,6 +242,8 @@ private:
 #include <limits> // for std::numeric_limits<>
 #include <optional> // for std::optional<>
 #include <stdexcept> // for std::invalid_argument
+#include <vector> // for std::vector
+#include <numeric> // for std::generate
 // 生成服从均匀分布的浮点随机数
 template<typename RealType = double, typename Engine = std::mt19937_64> // 模板参数：RealType 是生成的随机数类型，Engine 是随机数引擎类型
     requires std::is_floating_point_v<RealType>&& std::uniform_random_bit_generator<Engine> // 要求 RealType 是浮点类型，Engine 是符合概束 uniform_random_bit_generator 的随机数引擎
@@ -269,8 +285,7 @@ public:
         if (!current_state.current_seed) seed();
     }
 
-    // ---------- 核心生成器 ----------
-    // 通过 function call () 生成随机数
+    // 通过 function call () 访问随机数
     RealType operator()() noexcept
     {
         current_state.current_value = current_state.dist(current_state.re);
@@ -278,6 +293,11 @@ public:
         current_state.sum += current_state.current_value;
         current_state.sum_sq += current_state.current_value * current_state.current_value;
         return current_state.current_value;
+    }
+    // 生成随机向量，保存到输入的 std::vector 中；这个函数并无封装价值，而且好像还不如 for 循环快
+    void generate_random_vector(std::vector<RealType>& v)
+    {
+        std::generate(v.begin(), v.end(), [&] { return (*this)(); });
     }
 
     // ---------- 状态查询 ----------
