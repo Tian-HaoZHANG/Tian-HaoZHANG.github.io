@@ -4,7 +4,7 @@
 // 如需生成 RSS feed，必须填写 title、description 和 date 元数据
 
 #let title = "C++ random number generator template"
-#let description = "Generate uniformly or normally distributed random numbers, one at a time."
+#let description = "Generate uniformly or normally distributed random numbers, one at a single call."
 
 #show: template.with(
   title: title,
