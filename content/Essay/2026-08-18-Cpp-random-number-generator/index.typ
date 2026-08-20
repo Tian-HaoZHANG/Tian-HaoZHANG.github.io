@@ -47,6 +47,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
       return 0;
   }
+
   ```]
 
 == The header file
@@ -404,9 +405,19 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
   } // namespace random_number_generator
 
   #endif // MY_RANDOM_NUMBER_H_
+
   ```]
 
 == Test program
+
+#tufted.margin-note({
+  image("normal_distribution_validation.png")
+})
+
+#tufted.margin-note[
+  Validation of the generated normal distribution.
+]
+
 #figure(caption: [Test program, also serve as a simple example.])[
   ```cpp
   #include <iostream> // for std::cout
@@ -443,9 +454,9 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
       std::cout << "CPU time: " << cpu_time << " ms\n";
       return 0;
   }
-  ```]
 
-#figure(image("normal_distribution_validation.png"), caption: [Validation of the generated normal distribution])
+  ```
+]
 
 #figure(caption: [Compare with Python numpy])[
   ```python
@@ -478,6 +489,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
   if __name__ == "__main__":
       main()
-  ```]
+  ```
+]
 
 #bibliography("refs.bib")
