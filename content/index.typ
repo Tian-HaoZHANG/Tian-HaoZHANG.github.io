@@ -11,7 +11,7 @@
   Kayamori Ruka
 ]
 
-Note: This page is under construction.
+Note: This website is under construction.
 
 
 = Tufted Blog Template
