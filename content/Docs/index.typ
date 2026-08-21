@@ -8,6 +8,11 @@
 = Archive
 
 - #link(
+    "physical_constants-PDF.pdf",
+    "Physical constants",
+  )
+
+- #link(
     "cold_plasma_dielectric_tensor.png",
     "Cold plasma dielectric tensor",
   )

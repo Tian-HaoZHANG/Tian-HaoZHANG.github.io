@@ -40,6 +40,12 @@
   title: "On the monochromatic plane electromagnetic waves",
 )
 
+#tufted.blog-entry(
+  date: datetime(year: 2026, month: 1, day: 17),
+  path: "2026-01-17-Cpp-rk4/",
+  title: "C++ rk4 algorithm",
+)
+
 == 2025
 
 #tufted.blog-entry(

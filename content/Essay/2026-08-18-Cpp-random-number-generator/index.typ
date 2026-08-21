@@ -19,16 +19,16 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
 == A minimum prototype
 
-#figure(caption: [A minimum prototype of a random number generator in C++])[
+#figure(caption: [A minimum prototype of a random number generator in C++.])[
   ```cpp
   #include <iostream>
   #include <random>
 
   // 生成服从正态分布的 double 随机数的 function object (functor)
-  class Rand_normal {
+  class RandNormal {
   public:
       // 真随机数生产成本太高，因此我们以真随机数为种子，批量生产伪随机数
-      Rand_normal(double mean, double stddev) : dist {mean, stddev} { re.seed(std::random_device {}()); } // 用 random_device 生成一个真随机种子
+      RandNormal(double mean, double stddev) : dist {mean, stddev} { re.seed(std::random_device {}()); } // 用 random_device 生成一个真随机种子
       double operator()() { return dist(re); } // 播种后的引擎可以高效地产生伪随机数，dist 进而将其映射到正态分布
       // 这样定义以后，我们在使用时就可以通过 function call () 访问随机数
       void seed(unsigned int s) { re.seed(s); } // 允许人为指定种子，便于复现随机数序列
@@ -39,7 +39,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
   int main()
   {
-      Rand_normal r {0.0, 1.0}; // 像定义变量一样定义一个随机数生成器对象 r
+      RandNormal r {0.0, 1.0}; // 像定义变量一样定义一个随机数生成器对象 r
 
       for (int i = 0; i < 10; ++i) {
           std::cout << r() << "\n"; // 通过 function call () 访问随机数
@@ -50,18 +50,19 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
   ```]
 
-== The header file
-#figure(caption: [Template])[
+== The .hpp header file
+#figure(caption: [The template.])[
   ```cpp
   // 宏守卫 #ifndef... 保证这个宏只被定义一次，从而保证这个头文件只被 #include 一次；#pragma once 是较新的方式，此时不用 #define... 和 #endif //...
-  #ifndef MY_RANDOM_NUMBER_H_
-  #define MY_RANDOM_NUMBER_H_
+  #ifndef RANDOM_NUMBER_H
+  #define RANDOM_NUMBER_H
 
   #include <random>
   #include <type_traits> // for std::is_arithmetic_v<>, std::is_integral_v<>, std::conditional_t and std::is_floating_point_v<>
   #include <optional> // for std::optional<>；optional 通过解引用 * 或 .value() 访问值，std::nullopt 表示无值
   #include <stdexcept> // for std::invalid_argument
 
+  // 以下代码只使用了单个熵源 (random_device) 播种；要进一步提高随机数质量，可以用 std::seed_seq 播种
   namespace random_number_generator {
       // 能够从本头文件直接获取的分布类型
       enum class MyDistributionType {
@@ -74,7 +75,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
       template<typename T = double, typename Engine = std::mt19937_64> // 模板参数：T 是生成的随机数类型，Engine 是随机数引擎类型
           requires std::is_arithmetic_v<T>&& std::uniform_random_bit_generator<Engine> // 要求 T 是算术类型（整数或浮点数），Engine 是符合概束 uniform_random_bit_generator 的随机数引擎
       // 概束 uniform_random_bit_generator<G> 指定了 G 是一种均匀随机比特生成器类型，也就是说，类型 G 的对象是一个函数对象 (function object, functor)，它返回 unsigned int，使得在可能结果范围内的每个值都具有（理想上）相等的返回概率
-      class Rand_uniform {
+      class RandUniform {
       public:
           // 便于外部使用的数据类型别名
           using value_type = T;
@@ -108,16 +109,16 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
           // 允许用户指定分布区间 [low, high)
           // 若不指定 low 则默认为 [0, high)
           // 若都不指定则默认为 [0, 1)
-          Rand_uniform(T low, T high)
+          RandUniform(T low, T high)
               : current_state {make_state(low, high)}
           {
               seed(); // make_state 不设置种子，用 random_device 生成一个随机种子
           }
-          Rand_uniform(T high) : Rand_uniform(T(0), high) {} // 委托构造函数
-          Rand_uniform() : Rand_uniform(T(0), T(1)) {} // 委托构造函数
+          RandUniform(T high) : RandUniform(T(0), high) {} // 委托构造函数
+          RandUniform() : RandUniform(T(0), T(1)) {} // 委托构造函数
 
           // 允许从状态结构体构造对象，便于从保存的状态直接恢复；explicit 避免隐式转换
-          explicit Rand_uniform(const State& state)
+          explicit RandUniform(const State& state)
               : current_state {state}
           {
               validate_range(state.low, state.high);
@@ -251,7 +252,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
       // 生成服从正态分布的浮点随机数
       template<typename RealType = double, typename Engine = std::mt19937_64> // 模板参数：RealType 是生成的随机数类型，Engine 是随机数引擎类型
           requires std::is_floating_point_v<RealType>&& std::uniform_random_bit_generator<Engine> // 要求 RealType 是浮点类型，Engine 是符合概束 uniform_random_bit_generator 的随机数引擎
-      class Rand_normal {
+      class RandNormal {
       public:
           // 便于外部使用的数据类型别名
           using value_type = RealType;
@@ -275,14 +276,14 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
           // 允许用户指定均值和标准差
           // 如果都不指定（不允许仅指定一个），则默认为均值 0，标准差 1
-          Rand_normal(RealType mean, RealType standard_deviation)
+          RandNormal(RealType mean, RealType standard_deviation)
               : current_state {make_state(mean, standard_deviation)}
           {
               seed(); // make_state 不设置种子，用 random_device 生成一个随机种子
           }
-          Rand_normal() : Rand_normal(RealType(0), RealType(1)) {} // 委托构造函数
+          RandNormal() : RandNormal(RealType(0), RealType(1)) {} // 委托构造函数
           // 允许从状态结构体构造对象，便于从保存的状态直接恢复；explicit 避免隐式转换
-          explicit Rand_normal(const State& state)
+          explicit RandNormal(const State& state)
               : current_state {state}
           {
               validate_sigma(current_state.sigma);
@@ -404,7 +405,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
       };
   } // namespace random_number_generator
 
-  #endif // MY_RANDOM_NUMBER_H_
+  #endif // RANDOM_NUMBER_H
 
   ```]
 
@@ -418,11 +419,11 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
   Validation of the generated normal distribution.
 ]
 
-#figure(caption: [Test program, also serve as a simple example.])[
+#figure(caption: [A test program, also serve as a simple example.])[
   ```cpp
   #include <iostream> // for std::cout
-  #include "my_random_number.h" // for namespace random_number_generator
-  #include <vector> // for std::vector
+  #include "header_files/random_number.hpp" // for namespace random_number_generator
+  #include <vector> // for std::vector; std::array 会栈溢出
   #include <numeric> // for std::accumulate, std::reduce
   #include <algorithm> // for std::generate, std::for_each
   #include <execution> // for std::execution::seq, par, unseq, par_unseq
@@ -432,14 +433,14 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
   {
       auto start = std::clock();
 
-      random_number_generator::Rand_normal r {}; // 像定义变量一样定义一个随机数生成器对象 r
+      random_number_generator::RandNormal r {}; // 像定义变量一样定义一个随机数生成器对象 r
       //std::cout << "Current value = " << *(r.get_current_value()) << "\n";
       std::cout << r() << "  " << r() << "\n"; // 通过 function call () 访问随机数
       std::cout << "Current value = " << *(r.get_current_value()) << "\n"; // 查看当前随机数值
 
       r.reset();
       constexpr int N = 1000'0000;
-      std::vector<double> v(N);
+      std::vector<double> v(N, 0.0);
       std::generate(std::execution::par_unseq, v.begin(), v.end(), [&]() {return r();}); // 使用 Lambda 表达式做谓词，批量向 v 中生成随机数
       std::cout << v[0] << "  " << v[1] << "\n"; // 通过 function call () 访问随机数
       double mean = std::reduce(std::execution::par_unseq, v.begin(), v.end(), 0.0) / double(N);
@@ -458,34 +459,35 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
   ```
 ]
 
-#figure(caption: [Compare with Python numpy])[
+#figure(caption: [Compare with Python numpy.])[
   ```python
-  # It turns that the Python numpy code is approximately of same performance as the -O2 optimized C++ code, but slightly slower than the -O3 optimized one.
+  # It turns out that the Python numpy code is approximately of same performance as the -O2 optimized C++ code,
+  # but slightly slower than the -O3 optimized one.
   import numpy as np
   import time
 
   def main():
-      # 开始计时（CPU时间，包括用户态和系统态）
+      # 开始计时（CPU时间）
       t0 = time.process_time()
 
       N = 1000_0000
       print(f"Statistics of {N} normally distributed doubles in [0, 1):")
-      # 生成 N 个标准正态分布随机数
+      # 生成服从 N 个标准正态分布的随机数
       data = np.random.randn(N)
 
       # 计算样本均值和样本方差（无偏估计，ddof=1）
       mean = np.mean(data)
       variance = np.var(data, ddof=1)
 
-      # 输出结果
       print(f"Mean: {mean}")
       print(f"Sample variance: {variance}")
+
       # 结束计时
       t1 = time.process_time()
       elapsed_ms = (t1 - t0) * 1000
       print(
           f"CPU time: {elapsed_ms:.2f} ms"
-      )  # 保留两位小数，与C++的整数毫秒稍有不同，但更精确
+      )  # 保留两位小数
 
   if __name__ == "__main__":
       main()
