@@ -71,39 +71,48 @@
   #ifndef RK4_H
   #define RK4_H
 
-  #include <type_traits>
-  #include <concepts>
-  #include <span>
-  #include <vector>
+  #include <type_traits> // for std::is_floating_point_v
+  #include <concepts> // for std::invocable
+  #include <span> // std::vector, std::array 跟 built-in array 的接口，但 span 不拥有（或者说，储存）数据
+  #include <vector> // 内部运算时必须有 container 来存储数据
   #include <utility> // for std::pair 和 std::forward
   #include <stdexcept>
 
   namespace rk4 {
 
-      // 工作区：封装 RK4 所需的临时数组，避免内部计算时重复分配
-      template<typename RealType>
-      struct RK4Workspace {
-          RK4Workspace() = default; // 默认构造函数构造出的 std::vector 的 .size() 和 .capacity() 均为 0
-          explicit RK4Workspace(std::size_t n) : RK4Workspace() { resize(n); }
+      namespace detail {
+          // 工作区：封装 RK4 所需的临时数组，避免内部计算时重复分配
+          template<typename RealType = double>
+              requires std::is_floating_point_v<RealType>
+          struct RK4Workspace {
+              RK4Workspace() = default; // 默认构造函数构造出的 std::vector 的 .size() 和 .capacity() 均为 0
+              explicit RK4Workspace(std::size_t n) : RK4Workspace() { resize(n); }
 
-          std::size_t size() const { return k1.size(); } // 返回工作区的大小（维度）
+              std::size_t size() const { return k1.size(); } // 返回工作区的大小（维度）
 
-          void resize(std::size_t n)
-          {
-              k1.resize(n); // resize() 改变 .size()；如果这里的 n > .capacity()，则会重新分配内存，导致指针空悬 —— 为了防止此类现象，最好先 reserve()；当 vector.size() == n 时，resize() 什么也不做
-              k2.resize(n);
-              k3.resize(n);
-              temp.resize(n);
-              dydx.resize(n);
-          }
+              void resize(std::size_t n)
+              {
+                  k1.resize(n); // resize() 改变 .size()；如果这里的 n > .capacity()，则会重新分配内存，导致指针空悬 —— 为了防止此类现象，最好先 reserve()；当 vector.size() == n 时，resize() 什么也不做
+                  k2.resize(n);
+                  k3.resize(n);
+                  temp.resize(n);
+                  dydx.resize(n);
+              }
 
-          std::vector<RealType> k1, k2, k3, temp, dydx;
-      };
+              void destroy() // 右值引用，避免拷贝
+              {
+                  std::vector<RealType>().swap(k1); // 释放内存，避免内存泄漏
+                  std::vector<RealType>().swap(k2);
+                  std::vector<RealType>().swap(k3);
+                  std::vector<RealType>().swap(temp);
+                  std::vector<RealType>().swap(dydx);
+              }
 
+              std::vector<RealType> k1, k2, k3, temp, dydx; // 如果模板参数加入 Dim, 这里似乎就可以用 std::array 了，效率应该能提升一些
+          };
 
-      namespace step {
           // 使用工作区的 step 函数，内部使用可以避免反复创建工作区变量
-          template<typename RealType, typename DerivFunc>
+          template<typename RealType = double, typename DerivFunc = void (*)(RealType, std::span<const RealType>, std::span<RealType>)>
               requires std::is_floating_point_v<RealType>&& std::invocable<DerivFunc, RealType, std::span<const RealType>, std::span<RealType>>
           // std::invocable<T, Args...> 约束 T 必须要能在 Args... 上调用，并且不要求特定返回类型
           void step(RealType& x, std::span<RealType> y, RealType h, DerivFunc&& calculate_dydx, RK4Workspace<RealType>& ws)
@@ -113,6 +122,7 @@
               if (ws.size() < n) {
                   ws.resize(n); // 确保工作区大小足够
               }
+
               // 引用工作区内的数组，避免重复访问 ws 成员
               auto& k1 = ws.k1;
               auto& k2 = ws.k2;
@@ -151,7 +161,7 @@
           }
 
           // 自行创建工作区的 step 函数，方便外部直接调用；但其效率因为反复创建工作区而较低，不推荐在内部使用
-          template<typename RealType, typename DerivFunc>
+          template<typename RealType = double, typename DerivFunc = void (*)(RealType, std::span<const RealType>, std::span<RealType>)>
               requires std::is_floating_point_v<RealType>&& std::invocable<DerivFunc, RealType, std::span<const RealType>, std::span<RealType>>
           void step(RealType& x, std::span<RealType> y, RealType h, DerivFunc&& calculate_dydx)
           {
@@ -166,7 +176,7 @@
           requires std::is_floating_point_v<RealType>
       class RK4Solver {
       public:
-          using State = std::pair<RealType, std::vector<RealType>>;
+          using State = std::pair<RealType, std::vector<RealType>>; // 如果模板参数加入 Dim, 这里似乎就可以用 std::array 了，效率应该能提升一些
           using FuncPtrType = void (*)(RealType, std::span<const RealType>, std::span<RealType>); // function pointer
 
           // 构造函数
@@ -206,19 +216,23 @@
           void reset_all()
           {
               ode_function = nullptr;
-              initial_state = {RealType(0), {}};
-              current_state = {RealType(0), {}};
+              initial_state.first = RealType(0);
+              // std::cout << "initial_state.second.capacity() = " << initial_state.second.capacity() << "\n";
+              std::vector<RealType>().swap(initial_state.second); // 释放 initial_state.second 的内存
+              // std::cout << "initial_state.second.capacity() = " << initial_state.second.capacity() << "\n"; // 这里的 size() 应该为 0
+              current_state.first = RealType(0);
+              std::vector<RealType>().swap(current_state.second); // 释放 current_state.second
               step_length = RealType(0);
               steps = 0;
-              state_history = {};
-              workspace = {};
+              std::vector<State>().swap(state_history); // 释放 state_history 的内存
+              workspace.destroy();
           }
           // 重置到 initial_state，保留 ODE 函数、步长和步数
           void reset_to_initial()
           {
               current_state = initial_state;
-              state_history = {};
-              workspace = {};
+              std::vector<State>().swap(state_history); // 释放 state_history 的内存
+              workspace.destroy();
           }
 
           const State& get_initial_state() const { return initial_state; }
@@ -238,23 +252,23 @@
           // 从 current_state 出发继续求解；返回当前状态（最后一步结束后的状态）的 const reference
           const State& solve()
           {
-              if (ode_function == nullptr) throw std::runtime_error("ODE function pointer is null.");
-              if (step_length == RealType(0)) throw std::runtime_error("Step length is zero.");
-              if (steps == 0) throw std::runtime_error("Number of steps is zero.");
-              if (initial_state.second.empty()) throw std::runtime_error("Initial dependent variables are empty.");
+              if (ode_function == nullptr) throw std::invalid_argument("ODE function pointer is null.");
+              if (step_length == RealType(0)) throw std::invalid_argument("Step length is zero.");
+              if (steps == 0) throw std::invalid_argument("Number of steps is zero.");
+              if (initial_state.second.empty()) throw std::length_error("Initial dependent variables are empty.");
 
-              workspace = {};
+              workspace.destroy();
               workspace.resize(current_state.second.size()); // 初始化工作区，确保其大小足够
 
               if (state_history.empty()) {
-                  state_history.reserve(steps + 1); // 预分配空间，避免多次扩容
+                  state_history.reserve(steps + 1); // 预分配空间，避免中途扩容
                   state_history.push_back(current_state);
               } else {
-                  state_history.reserve(state_history.size() + steps); // 预分配空间，避免多次扩容
+                  state_history.reserve(state_history.size() + steps); // 预分配空间，避免中途扩容
               }
 
               for (std::size_t i = 0; i < steps; ++i) {
-                  step::step<RealType>(current_state.first, current_state.second, step_length, ode_function, workspace);
+                  detail::step<RealType>(current_state.first, current_state.second, step_length, ode_function, workspace); // 这里写 detail::step<RealType, FuncPtrType> 会报错，不知何故
                   state_history.push_back(current_state); // 每前进一步，就保存一次状态
               }
 
@@ -284,8 +298,8 @@
           RealType step_length {RealType(0)};
           std::size_t steps {0};
           std::vector<State> state_history {};
-          RK4Workspace<RealType> workspace {};  // 内部维护一个工作区，避免重复创建工作区变量
-      };
+          detail::RK4Workspace<RealType> workspace {};  // 内部维护一个工作区，避免重复创建工作区变量
+      }; // class RK4Solver
 
   } // namespace rk4
   #endif // RK4_H
@@ -301,8 +315,39 @@
   #include <cmath>
   #include <span>
   #include <array>
-  #include <vector>
   #include "header_files/rk4.hpp"
+
+  #include <windows.h>
+  //#include <processthreadsapi.h>
+  #include <cstdint>
+
+  class CPUTimer {
+  public:
+      CPUTimer() {
+          // 获取程序启动时的 CPU 时间，用于计算相对时间
+          GetProcessTimes(GetCurrentProcess(), &ftCreation, &ftExit, &ftKernel, &ftUser);
+          startTime = filetimeToUint64(ftUser) + filetimeToUint64(ftKernel);
+      }
+
+      void reset() {
+          GetProcessTimes(GetCurrentProcess(), &ftCreation, &ftExit, &ftKernel, &ftUser);
+          startTime = filetimeToUint64(ftUser) + filetimeToUint64(ftKernel);
+      }
+
+      double elapsedSeconds() {
+          GetProcessTimes(GetCurrentProcess(), &ftCreation, &ftExit, &ftKernel, &ftUser);
+          uint64_t now = filetimeToUint64(ftUser) + filetimeToUint64(ftKernel);
+          return (now - startTime) * 100;
+      }
+
+  private:
+      FILETIME ftCreation, ftExit, ftKernel, ftUser;
+      uint64_t startTime;
+
+      static uint64_t filetimeToUint64(const FILETIME& ft) {
+          return (static_cast<uint64_t>(ft.dwHighDateTime) << 32) | ft.dwLowDateTime;
+      }
+  };
 
   // 谐振子右端函数：dx/dt = v, dv/dt = - x
   void ode_function(double t, std::span<const double> y, std::span<double> dydx) {
@@ -326,18 +371,26 @@
 
   int main()
   {
+      CPUTimer timer;
+
       rk4::RK4Solver<double> solver {ode_function}; // 创建 RK4 求解器对象
 
-      solver.solve(0.0, std::array<double, 2> {1.0, 0.0}, 0.01, 100); // 从 initial_state = (0.0, {1.0, 0.0}) 开始，以 0.01 为步长求解 100 步
+      constexpr int N = 100;
+
+      solver.solve(0.0, std::array<double, 2> {1.0, 0.0}, 0.001, N); // 从 initial_state = (0.0, {1.0, 0.0}) 开始，以 0.01 为步长求解 100 步
       auto herstory = solver.get_history(); // auto 是按值推导，如果不写 & （就像这里一样）得到的就是 copy of state_history
       const auto& history = solver.get_history(); // 这里得到的是 const reference of state_history；同 auto& history = solver.get_history();, 因为 const 可以被推导出来
-      solver.solve(0.02, 100); // 从上一次求解所得的结果出发，以 0.02 为步长求解 100 步
-      solver.solve(0.01, 100); // 从上一次求解所得的结果出发，以 0.01 为步长求解 100 步
+      solver.solve(0.002, N); // 从上一次求解所得的结果出发，继续以 0.02 为步长求解 100 步
+      solver.solve(0.001, N); // 从上一次求解所得的结果出发，继续以 0.01 为步长求解 100 步
 
-      std::cout << history << "\n\n\n" << herstory << "\n\nHistory has changed, but herstory is not.";
+      std::cout << history << "\n\n\n" << herstory << "\n\nHistory has changed, but herstory is not.\n";
       // history 指向的 state_history 已经被修改了，而 herstory 是在第一次调用 get_history() 时的 copy，所以 herstory 没有被修改
       // const 是说 history 不能被直接修改，而不是说 history 指向的 state_history 不能被修改
       // 当 history 指向的 state_history 被修改时，history 作为引用也就被间接修改了
+      solver.reset_all(); // 这里只是测试一下，实际上离开作用域会自己析构
+
+      std::cout << "CPU time: " << timer.elapsedSeconds() << " ns\n";
+
       return 0;
   }
 

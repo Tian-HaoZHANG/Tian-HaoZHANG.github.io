@@ -139,10 +139,10 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
           // ---------- 状态查询 ----------
           // [[nodiscard]] 表示调用者不应忽略返回值；noexcept 表示函数不会抛出异常；被标记为 const 的函数不会修改调用它的对象 (即 *this, this 指针指向的对象) 的状态
 
-          [[nodiscard]] State get_current_state() const noexcept { return current_state; } // 返回当前状态结构体
+          [[nodiscard]] const State& get_current_state() const noexcept { return current_state; } // 返回当前状态结构体
           [[nodiscard]] T get_low() const noexcept { return current_state.low; } // 返回当前分布区间的左端点
           [[nodiscard]] T get_high() const noexcept { return current_state.high; } // 返回当前分布区间的右端点
-          [[nodiscard]] auto get_current_distribution() const noexcept { return current_state.dist; } // 返回当前分布
+          [[nodiscard]] const auto& get_current_distribution() const noexcept { return current_state.dist; } // 返回当前分布
           [[nodiscard]] std::optional<unsigned int> get_current_seed() const noexcept { return current_state.current_seed; } // 返回当前种子；有可能无值 std::nullopt
           [[nodiscard]] unsigned int get_count() const noexcept { return current_state.count; } // 返回已经生成的随机数数目
           [[nodiscard]] std::optional<T> get_current_value() const noexcept { return current_state.current_value; } // 返回当前（或者说，上一个）随机数取值
@@ -427,11 +427,41 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
   #include <numeric> // for std::accumulate, std::reduce
   #include <algorithm> // for std::generate, std::for_each
   #include <execution> // for std::execution::seq, par, unseq, par_unseq
-  #include <ctime> // for std::clock
+  #include <windows.h>
+  //#include <processthreadsapi.h>
+  #include <cstdint>
+
+  class CPUTimer {
+  public:
+      CPUTimer() {
+          // 获取程序启动时的 CPU 时间，用于计算相对时间
+          GetProcessTimes(GetCurrentProcess(), &ftCreation, &ftExit, &ftKernel, &ftUser);
+          startTime = filetimeToUint64(ftUser) + filetimeToUint64(ftKernel);
+      }
+
+      void reset() {
+          GetProcessTimes(GetCurrentProcess(), &ftCreation, &ftExit, &ftKernel, &ftUser);
+          startTime = filetimeToUint64(ftUser) + filetimeToUint64(ftKernel);
+      }
+
+      double elapsedSeconds() {
+          GetProcessTimes(GetCurrentProcess(), &ftCreation, &ftExit, &ftKernel, &ftUser);
+          uint64_t now = filetimeToUint64(ftUser) + filetimeToUint64(ftKernel);
+          return double(now - startTime) / 1e4; // ms
+      }
+
+  private:
+      FILETIME ftCreation, ftExit, ftKernel, ftUser;
+      uint64_t startTime;
+
+      static uint64_t filetimeToUint64(const FILETIME& ft) {
+          return (static_cast<uint64_t>(ft.dwHighDateTime) << 32) | ft.dwLowDateTime;
+      }
+  };
 
   int main()
   {
-      auto start = std::clock();
+      CPUTimer timer;
 
       random_number_generator::RandNormal r {}; // 像定义变量一样定义一个随机数生成器对象 r
       //std::cout << "Current value = " << *(r.get_current_value()) << "\n";
@@ -450,9 +480,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
       std::cout << "\nMean = " << mean << " == " << r.get_mean() << "\nSample var = " << sample_var << " == " << r.get_sample_variance() << "\nNote that \"==\" needs reset().\n";
 
-      auto end = std::clock();
-      double cpu_time = static_cast<double>(end - start);
-      std::cout << "CPU time: " << cpu_time << " ms\n";
+      std::cout << "CPU time: " << timer.elapsedSeconds() << " ms\n";
       return 0;
   }
 
@@ -462,7 +490,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 #figure(caption: [Compare with Python numpy.])[
   ```python
   # It turns out that the Python numpy code is approximately of same performance as the -O2 optimized C++ code,
-  # but slightly slower than the -O3 optimized one.
+  # which is expected because numpy is implemented in C.
   import numpy as np
   import time
 
