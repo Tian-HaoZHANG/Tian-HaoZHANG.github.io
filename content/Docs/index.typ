@@ -9,17 +9,17 @@
 
 - #link(
     "physical_constants-PDF.pdf",
-    "Physical constants",
+    "Physical constants.pdf",
   )
 
 - #link(
     "cold_plasma_dielectric_tensor.png",
-    "Cold plasma dielectric tensor",
+    "Cold plasma dielectric tensor.png",
   )
 
 - #link(
-    "waves and instabilities in plasmas 20260814.pdf",
-    "Liu Chen (陈骝)'s textbook《Waves and Instabilities in Plasmas》— retypesetted",
+    "waves and instabilities in plasmas 20260901.pdf",
+    "Liu Chen (陈骝)'s book《Waves and Instabilities in Plasmas》— retypesetted pdf",
   )
 
 

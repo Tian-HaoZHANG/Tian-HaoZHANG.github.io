@@ -3,7 +3,7 @@
 #import "../../../mod.typ": *
 // 如需生成 RSS feed，必须填写 title、description 和 date 元数据
 
-#let title = "C++ random number generator template"
+#let title = "A simple C++ random number generator template"
 #let description = "Generate uniformly or normally distributed random numbers, one at a single call; only the standard library is used."
 
 #show: template.with(
@@ -24,29 +24,29 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
   #include <iostream>
   #include <random>
 
-  /*
-  #include <limits>
-  #include <cstdint>
-  void test_random_device()
-  {
-      std::random_device rd {};
+  using SeedType = std::random_device::result_type;
 
-      std::cout << "Entropy: " << rd.entropy() << "\n\n"; // 如果返回 0 则说明这是伪随机数，> 0 则是真随机数
-      std::cout << "Min value: " << std::numeric_limits<std::random_device::result_type>::min() << "\n";
-      std::cout << "Max value: " << std::numeric_limits<std::random_device::result_type>::max() << "\n\n";
+  // #include <limits>
+  // #include <cstdint>
+  // void test_random_device()
+  // {
+  //     std::random_device rd {};
 
-      std::cout << "Max value of int: " << std::numeric_limits<int>::max() << "\n";
-      std::cout << "Max value of unsigned int: " << std::numeric_limits<unsigned int>::max() << "\n";
-      std::cout << "Max value of long: " << std::numeric_limits<long>::max() << "\n";
-      std::cout << "Max value of unsigned long: " << std::numeric_limits<unsigned long>::max() << "\n";
-      std::cout << "Max value of long long: " << std::numeric_limits<long long>::max() << "\n";
-      std::cout << "Max value of unsigned long long: " << std::numeric_limits<unsigned long long>::max() << "\n";
-      std::cout << "Max value of std::int32_t: " << std::numeric_limits<std::int32_t>::max() << "\n";
-      std::cout << "Max value of SeedType: " << std::numeric_limits<SeedType>::max() << "\n";
-      std::cout << "Max value of std::int64_t: " << std::numeric_limits<std::int64_t>::max() << "\n";
-      std::cout << "Max value of std::uint64_t: " << std::numeric_limits<std::uint64_t>::max() << "\n";
-  }
-  */
+  //     std::cout << "Entropy: " << rd.entropy() << "\n\n"; // 如果返回 0 则说明这是伪随机数，> 0 则是真随机数
+  //     std::cout << "Min value: " << std::numeric_limits<SeedType>::min() << "\n";
+  //     std::cout << "Max value: " << std::numeric_limits<SeedType>::max() << "\n\n";
+
+  //     std::cout << "Max value of int: " << std::numeric_limits<int>::max() << "\n";
+  //     std::cout << "Max value of unsigned int: " << std::numeric_limits<unsigned int>::max() << "\n";
+  //     std::cout << "Max value of long: " << std::numeric_limits<long>::max() << "\n";
+  //     std::cout << "Max value of unsigned long: " << std::numeric_limits<unsigned long>::max() << "\n";
+  //     std::cout << "Max value of long long: " << std::numeric_limits<long long>::max() << "\n";
+  //     std::cout << "Max value of unsigned long long: " << std::numeric_limits<unsigned long long>::max() << "\n";
+  //     std::cout << "Max value of std::int32_t: " << std::numeric_limits<std::int32_t>::max() << "\n";
+  //     std::cout << "Max value of uint32_t: " << std::numeric_limits<std::uint32_t>::max() << "\n";
+  //     std::cout << "Max value of std::int64_t: " << std::numeric_limits<std::int64_t>::max() << "\n";
+  //     std::cout << "Max value of std::uint64_t: " << std::numeric_limits<std::uint64_t>::max() << "\n";
+  // }
 
   // 生成服从正态分布的 double 随机数的 function object (functor)
   class RandNormal {
@@ -55,7 +55,8 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
       RandNormal(double mean, double stddev) : dist {mean, stddev} { re.seed(std::random_device {}()); } // 用 random_device 生成一个真随机种子
       double operator()() { return dist(re); } // 播种后的引擎可以高效地产生伪随机数，dist 进而将其映射到正态分布
       // 这样定义以后，我们在使用时就可以通过 function call () 访问随机数
-      void seed(SeedType s) { re.seed(s); } // 允许人为指定种子，便于复现随机数序列
+      template <typename IntegerType>
+      void seed(IntegerType s) { re.seed(static_cast<SeedType>(s)); } // 允许人为指定种子，便于复现随机数序列
   private:
       std::mt19937 re; // 将 梅森绞扭器 (Mersenne Twister) 作为随机数引擎
       std::normal_distribution<double> dist; // 正态分布
@@ -63,10 +64,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
   int main()
   {
-      /*
-      using SeedType = std::random_device::result_type;
-      test_random_device(); // 测试 random_device 的熵和 result_type
-      */
+      // test_random_device(); // 测试 random_device 的熵和 result_type
 
       RandNormal r {0.0, 1.0}; // 像定义变量一样定义一个随机数生成器对象 r
 
@@ -76,6 +74,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
       return 0;
   }
+
 
   ```]
 

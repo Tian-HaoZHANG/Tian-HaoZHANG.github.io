@@ -70,54 +70,67 @@
 
 Use the physical constants in C++.\
 ```cpp
-// 宏守卫 #ifndef... 保证这个宏只被定义一次，从而保证这个头文件只被 #include 一次；#pragma once 是较新的方式，此时不用 #define... 和 #endif //..
-#ifndef PHYSICAL_CONSTANTS_H
-#define PHYSICAL_CONSTANTS_H
+// 宏守卫 #ifndef... 或 #if !defined(...) 保证这个宏只被定义一次，从而保证这个头文件只被 #include 一次；#pragma once 是较新的方式，此时不用 #define... 和 #endif //..
+#if !defined(PHYSICAL_CONSTANTS_HPP)
+#define PHYSICAL_CONSTANTS_HPP
 
 #include <numbers> // namespace std::numbers 中包含 e, egamma, pi, 以及一些常用的 log 和 sqrt
+#include <type_traits> // for std::is_arithmetic_v<> and std::is_floating_point_v<>
 
+// SI since 2019
 namespace physical_constants {
+    // Favor double over float unless there is no enough space, as the lack of precision in a float will often lead to inaccuracies.
+
     // ============================================================
-    //  Exact constants (2019 SI redefinition)
+    //  Exact constants
     // ============================================================
+
     // Speed of light in vacuum: c = 299 792 458 m/s  (exact)
     template<typename T>
-    inline constexpr T speed_of_light_v = T(299792458.0);
+        requires std::is_arithmetic_v<T> // 要求 T 是算术类型（整数或浮点数）
+    inline constexpr T speed_of_light_v = static_cast<T>(299792458.0); // static_cast 是静态类型转换，在编译期完成
     inline constexpr double speed_of_light = speed_of_light_v<double>;
 
     // Planck constant: h = 6.626 070 15e-34 J·s  (exact)
     template<typename T>
-    inline constexpr T planck_constant_v = T(6.62607015e-34);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T planck_constant_v = static_cast<T>(6.62607015e-34);
     inline constexpr double planck_constant = planck_constant_v<double>;
 
     // Reduced Planck constant: ħ = h / (2π)  (exact, derived)
     template<typename T>
-    inline constexpr T planck_constant_reduced_v = T(3.313035075e-34 * std::numbers::inv_pi);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T planck_constant_reduced_v = static_cast<T>(3.313035075e-34 * std::numbers::inv_pi);
     inline constexpr double planck_constant_reduced = planck_constant_reduced_v<double>;
 
     // Elementary charge: e = 1.602 176 634e-19 C  (exact)
     template<typename T>
-    inline constexpr T elementary_charge_v = T(1.602176634e-19);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T elementary_charge_v = static_cast<T>(1.602176634e-19);
     inline constexpr double elementary_charge = elementary_charge_v<double>;
 
     // Boltzmann constant: k_B = 1.380 649e-23 J/K  (exact)
     template<typename T>
-    inline constexpr T boltzmann_constant_v = T(1.380649e-23);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T boltzmann_constant_v = static_cast<T>(1.380649e-23);
     inline constexpr double boltzmann_constant = boltzmann_constant_v<double>;
 
     // Avogadro constant: N_A = 6.022 140 76e23 mol⁻¹  (exact)
     template<typename T>
-    inline constexpr T avogadro_constant_v = T(6.02214076e23);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T avogadro_constant_v = static_cast<T>(6.02214076e23);
     inline constexpr double avogadro_constant = avogadro_constant_v<double>;
 
     // Electron volt: eV = 1.602 176 634e-19 J  (exact, same as elementary charge)
     template<typename T>
-    inline constexpr T electron_volt_v = T(1.602176634e-19);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T electron_volt_v = static_cast<T>(1.602176634e-19);
     inline constexpr double electron_volt = electron_volt_v<double>;
 
     // Temperature of 1 eV: e / k_B (exact, derived)
     template<typename T>
-    inline constexpr T electron_volt_temperature_v = T(elementary_charge / boltzmann_constant);
+        requires std::is_arithmetic_v<T> // 要求 T 是算术类型（整数或浮点数）
+    inline constexpr T electron_volt_temperature_v = static_cast<T>(elementary_charge / boltzmann_constant);
     inline constexpr double electron_volt_temperature = electron_volt_temperature_v<double>;
 
     // ============================================================
@@ -126,42 +139,49 @@ namespace physical_constants {
 
     // Newtonian constant of gravitation: G = 6.674 30(15)e-11 m³·kg⁻¹·s⁻²
     template<typename T>
-    inline constexpr T gravitational_constant_v = T(6.67430e-11);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T gravitational_constant_v = static_cast<T>(6.67430e-11);
     inline constexpr double gravitational_constant = gravitational_constant_v<double>;
 
-    // Vacuum electric permittivity: ε₀ = 8.854 187 818 8(14)e-12 F/m
+    // Vacuum permittivity: ε₀ = 8.854 187 818 8(14)e-12 F/m
     template<typename T>
-    inline constexpr T vacuum_permittivity_v = T(8.8541878188e-12);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T vacuum_permittivity_v = static_cast<T>(8.8541878188e-12);
     inline constexpr double vacuum_permittivity = vacuum_permittivity_v<double>;
 
-    // Vacuum magnetic permeability: μ₀ = 1.256 637 061 27(20)e-6 H/m
+    // Vacuum permeability: μ₀ = 1.256 637 061 27(20)e-6 H/m
     template<typename T>
-    inline constexpr T vacuum_permeability_v = T(1.25663706127e-6);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T vacuum_permeability_v = static_cast<T>(1.25663706127e-6);
     inline constexpr double vacuum_permeability = vacuum_permeability_v<double>;
 
     // Electron mass: m_e = 9.109 383(28)e-31 kg
     template<typename T>
-    inline constexpr T electron_mass_v = T(9.109383e-31);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T electron_mass_v = static_cast<T>(9.109383e-31);
     inline constexpr double electron_mass = electron_mass_v<double>;
 
     // Proton mass: m_p = 1.672 621 925 95(52)e-27 kg
     template<typename T>
-    inline constexpr T proton_mass_v = T(1.67262192595e-27);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T proton_mass_v = static_cast<T>(1.67262192595e-27);
     inline constexpr double proton_mass = proton_mass_v<double>;
 
     // Proton-electron mass ratio: m_p / m_e = 1836.152 673 426(32)
     template<typename T>
-    inline constexpr T proton_electron_mass_ratio_v = T(1836.152673426);
+        requires std::is_arithmetic_v<T> // 要求 T 是算术类型（整数或浮点数）
+    inline constexpr T proton_electron_mass_ratio_v = static_cast<T>(1836.152673426);
     inline constexpr double proton_electron_mass_ratio = proton_electron_mass_ratio_v<double>;
 
     // (Unified) atomic mass unit: u = 1.660 539 068 92(52)e-27 kg
     template<typename T>
-    inline constexpr T atomic_mass_unit_v = T(1.66053906892e-27);
+        requires std::is_floating_point_v<T> // 要求 T 是浮点类型
+    inline constexpr T atomic_mass_unit_v = static_cast<T>(1.66053906892e-27);
     inline constexpr double atomic_mass_unit = atomic_mass_unit_v<double>;
 
 } // namespace physical_constants
 
-#endif // PHYSICAL_CONSTANTS_H
+#endif // PHYSICAL_CONSTANTS_HPP
 
 ```
 

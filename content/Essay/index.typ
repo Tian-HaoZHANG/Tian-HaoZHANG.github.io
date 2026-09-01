@@ -13,7 +13,7 @@
 #tufted.blog-entry(
   date: datetime(year: 2026, month: 8, day: 18),
   path: "2026-08-18-Cpp-random-number-generator/",
-  title: "C++ random number generator template",
+  title: "A simple C++ random number generator template",
 )
 
 #tufted.blog-entry(
@@ -43,7 +43,7 @@
 #tufted.blog-entry(
   date: datetime(year: 2026, month: 1, day: 17),
   path: "2026-01-17-Cpp-rk4/",
-  title: "C++ rk4 algorithm",
+  title: "A convenient C++ rk4 algorithm",
 )
 
 

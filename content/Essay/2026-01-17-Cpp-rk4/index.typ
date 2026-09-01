@@ -3,7 +3,7 @@
 #import "../../../mod.typ": *
 // 如需生成 RSS feed，必须填写 title、description 和 date 元数据
 
-#let title = "C++ rk4 algorithm"
+#let title = "A convenient C++ rk4 algorithm"
 #let description = "A C++ implementation of the 4th-order Runge-Kutta method for solving ordinary differential equations."
 
 #show: template.with(
