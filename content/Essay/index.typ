@@ -13,7 +13,7 @@
 #tufted.blog-entry(
   date: datetime(year: 2026, month: 8, day: 18),
   path: "2026-08-18-Cpp-random-number-generator/",
-  title: "A simple C++ random number generator template",
+  title: "random_number_generator.hpp",
 )
 
 #tufted.blog-entry(
@@ -37,13 +37,13 @@
 #tufted.blog-entry(
   date: datetime(year: 2026, month: 2, day: 15),
   path: "2026-02-15-monochromatic-plane-EM-waves/",
-  title: "On the monochromatic plane electromagnetic waves",
+  title: "Monochromatic plane electromagnetic waves",
 )
 
 #tufted.blog-entry(
   date: datetime(year: 2026, month: 1, day: 17),
   path: "2026-01-17-Cpp-rk4/",
-  title: "A convenient C++ rk4 algorithm",
+  title: "rk4.hpp",
 )
 
 
