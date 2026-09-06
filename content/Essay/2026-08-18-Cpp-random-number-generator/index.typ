@@ -3,7 +3,7 @@
 #import "../../../mod.typ": *
 // 如需生成 RSS feed，必须填写 title、description 和 date 元数据
 
-#let title = "random_number_generator.hpp"
+#let title = "C++: random number generator"
 #let description = "An out-of-box header-only C++ random number generator class that can generate uniformly or normally distributed random numbers (integer or floating points), one at a single call; only the standard library is used."
 
 #show: template.with(
@@ -57,13 +57,14 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
   public:
       // 真随机数生产成本太高，因此我们以真随机数（但不同平台不一样，有的平台 random_device 生成的也是伪随机数）为种子，批量生产伪随机数
       RandNormal(double mean, double stddev) : dist {mean, stddev} { re.seed(std::random_device {}()); } // 用 random_device 生成一个真随机种子
+      RandNormal() : RandNormal(0.0, 1.0) {} // 默认构造函数：均值为 0，标准差为 1
       double operator()() { return dist(re); } // 播种后的引擎可以高效地产生伪随机数，dist 进而将其映射到正态分布
       // 这样定义以后，我们在使用时就可以通过 function call () 访问随机数
       template <typename IntegerType>
       void seed(IntegerType s) { re.seed(static_cast<SeedType>(s)); } // 允许人为指定种子，便于复现随机数序列
   private:
-      std::mt19937 re; // 将 梅森绞扭器 (Mersenne Twister) 作为随机数引擎
-      std::normal_distribution<double> dist; // 正态分布
+      std::mt19937 re {}; // 将 梅森绞扭器 (Mersenne Twister) 作为随机数引擎
+      std::normal_distribution<RealType> dist { 0.0, 1.0 }; // 正态分布
   };
 
   // 关于 梅森绞扭器 (Mersenne Twister):
@@ -71,8 +72,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
   // As a result, std::mt19937 allocates 624 integers, whereas std::mt19937_64 allocates 312 integers.
   // * The integers allocated by std::mt19937 are defined to be of type std::uint_fast32_t, which could be 32-bit or 64-bit integers depending on the architecture.
   // * If std::uint_fast32_t resolves to a 64-bit integer, std::mt19937 will use 624 64-bit integers, making it double the size it needs to be.
-  // In the examples above, where we seed our std::mt19937 from the clock or std::random_device, our seed is only a single integer.
-  // This means we’re essentially initializing 624 integers using a single integer, which is significantly underseeding the Mersenne Twister PRNG.
+  // In the examples above, the seed is only a single integer. This means we’re essentially initializing 624 integers using a single integer, which is significantly underseeding the Mersenne Twister PRNG.
   // std::seed_seq is a type that was designed to help with this. We can pass it as many randomized values as we have, and then it will generate as many additional unbiased seed values as needed to initialize a PRNG’s state.
   // If you initialize std::seed_seq with a single value (e.g. from std::random_device) and then initialize a Mersenne Twister with the std::seed_seq object, std::seed_seq will generate 623 values of additional seed data. This won’t add randomness, but it will give us a better mix of 0 and 1 bits.
   // However, the more random data we can provide std::seed_seq, the better job it will do for us. So the easiest idea is to simply use std::random_device to give std::seed_seq more data to work with.
@@ -83,7 +83,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
   {
       // test_random_device(); // 测试 random_device 的熵和 result_type
 
-      RandNormal rng {0.0, 1.0}; // 像定义变量一样定义一个随机数生成器对象 r
+      RandNormal rng {}; // 像定义变量一样定义一个随机数生成器对象 r
 
       for (int i = 0; i < 10; ++i) {
           std::cout << rng() << "\n"; // 通过 function call () 访问随机数
@@ -92,16 +92,16 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
       return 0;
   }
 
+
   ```]
 
-== The .hpp header file
-#figure(caption: [The template.])[
+== The header file
+#figure(caption: [The class.])[
   ```cpp
-  // random_number_generator.hpp
+  // random_number.hpp
   #if !defined(RANDOM_NUMBER_HPP)
   #define RANDOM_NUMBER_HPP
 
-  #include <algorithm> // for std::generate
   #include <chrono> // for std::chrono::high_resolution_clock
   #include <cstddef> // for std::size_t
   #include <optional> // for std::optional<>；optional 通过解引用 * 或 .value() 访问值，std::nullopt 表示无值
@@ -109,18 +109,6 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
   #include <stdexcept> // for std::invalid_argument
   #include <type_traits> // for std::is_arithmetic_v<>, std::is_integral_v<>, std::conditional_t and std::is_floating_point_v<>
   #include <vector> // 保存种子序列
-
-  // 关于 梅森绞扭器 (Mersenne Twister):
-  // The internal state of a Mersenne Twister requires 19937 bits (2493 bytes), which is 624 32-bit values or 312 64-bit values.
-  // As a result, std::mt19937 allocates 624 integers, whereas std::mt19937_64 allocates 312 integers.
-  // * The integers allocated by std::mt19937 are defined to be of type std::uint_fast32_t, which could be 32-bit or 64-bit integers depending on the architecture.
-  // * If std::uint_fast32_t resolves to a 64-bit integer, std::mt19937 will use 624 64-bit integers, making it double the size it needs to be.
-  // In the examples above, where we seed our std::mt19937 from the clock or std::random_device, our seed is only a single integer.
-  // This means we’re essentially initializing 624 integers using a single integer, which is significantly underseeding the Mersenne Twister PRNG.
-  // std::seed_seq is a type that was designed to help with this. We can pass it as many randomized values as we have, and then it will generate as many additional unbiased seed values as needed to initialize a PRNG’s state.
-  // If you initialize std::seed_seq with a single value (e.g. from std::random_device) and then initialize a Mersenne Twister with the std::seed_seq object, std::seed_seq will generate 623 values of additional seed data. This won’t add randomness, but it will give us a better mix of 0 and 1 bits.
-  // However, the more random data we can provide std::seed_seq, the better job it will do for us. So the easiest idea is to simply use std::random_device to give std::seed_seq more data to work with.
-  // If we initialize std::seed_seq with 8 values from std::random_device instead of 1, then the remaining values generated by std::seed_seq should be much better.
 
   namespace random_number_generator {
       // 能够从本头文件直接获取的分布类型
@@ -491,6 +479,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
   #endif // RANDOM_NUMBER_HPP
 
+
   ```]
 
 == Test program
@@ -543,6 +532,7 @@ Refs: @website:博客园的一个教程 @website:std::random随机数库 @book:a
 
       return 0;
   }
+
 
   ```
 ]

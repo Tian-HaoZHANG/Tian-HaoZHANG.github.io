@@ -3,7 +3,7 @@
 #import "../../../mod.typ": *
 // 如需生成 RSS feed，必须填写 title、description 和 date 元数据
 
-#let title = "rk4.hpp"
+#let title = "C++: 4th-order Runge-Kutta method"
 #let description = "An out-of-box header-only C++ class implementing the 4th-order Runge-Kutta method for solving ordinary differential equations."
 
 #show: template.with(
@@ -66,7 +66,7 @@
 
 == The header file
 #figure(
-  caption: [The .hpp header file @book:Fitzpatrick-computational-physics @book:a-tour-of-cpp @website:cppreference.],
+  caption: [The class @book:Fitzpatrick-computational-physics @book:a-tour-of-cpp @website:cppreference.],
 )[
   ```cpp
   // rk4.hpp
@@ -317,6 +317,7 @@
   } // namespace rk4
   #endif // RK4_HPP
 
+
   ```
 ]
 
@@ -377,6 +378,7 @@
 
       return 0;
   }
+
 
   ```
 ]
