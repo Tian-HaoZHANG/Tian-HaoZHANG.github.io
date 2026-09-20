@@ -4,7 +4,7 @@
 // 如需生成 RSS feed，必须填写 title、description 和 date 元数据
 
 #let title = "C++: a simple magnetospheric magnetic field model"
-#let description = "A simple model for the magnetospheric magnetic field based on (with minor modifications) Taylor, H. E., and E. W. Hones Jr. (1965), Adiabatic motion of auroral particles in a model of the electric and magnetic fields surrounding the Earth, J. Geophys. Res., 70(15), 3605–3628, doi:10.1029/JZ070i015p03605."
+#let description = "A simple model for the magnetospheric magnetic field based on (with minor modifications)"
 
 #show: template.with(
   title: title,
@@ -14,20 +14,26 @@
 )
 
 = #title
-#description\
-Ref: @article:th65.
+#description @article:th65.
+
+#tufted.margin-note({
+  image("magnetic_lines.png")
+})
+#tufted.margin-note[
+  Plot of the magnetic field lines in the magnetosphere.
+]
 
 ```cpp
 // th65.hpp
 #if !defined(TH65_HPP)
 #define TH65_HPP
+
 #include <array>
 #include <cmath>
 #include <cstddef>
 #include <span>
 
 namespace th65 {
-
     // 给 std::array 定义一些运算
     namespace {
         template <typename T, std::size_t N>
@@ -42,7 +48,7 @@ namespace th65 {
         template <typename T, std::size_t N>
         T normalize(std::array<T, N>& v)
         {
-            T norm {};
+            T norm { static_cast<T>(0) };
             for (std::size_t i = 0; i < N; ++i) {
                 norm += v[i] * v[i];
             }
