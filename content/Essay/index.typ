@@ -12,8 +12,8 @@
 
 #tufted.blog-entry(
   date: datetime(year: 2026, month: 9, day: 20),
-  path: "2026-09-20-Cpp-th65model-magnetospheric-magnetic-field/",
-  title: "C++: a simple magnetospheric magnetic field model",
+  path: "2026-09-20-Cpp-gmf-th65/",
+  title: "C++: a simple geomagnetic field model",
 )
 
 #tufted.blog-entry(

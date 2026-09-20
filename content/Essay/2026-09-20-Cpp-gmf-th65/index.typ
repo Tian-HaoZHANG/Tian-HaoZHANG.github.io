@@ -3,8 +3,8 @@
 #import "../../../mod.typ": *
 // 如需生成 RSS feed，必须填写 title、description 和 date 元数据
 
-#let title = "C++: a simple magnetospheric magnetic field model"
-#let description = "A simple model for the magnetospheric magnetic field based on (with minor modifications)"
+#let title = "C++: a simple geomagnetic field model"
+#let description = "A simple geomagnetic field model (including contributions from the Earth's dipole, the effective mirror dipole and the cross-tail current) based on (with minor modifications)"
 
 #show: template.with(
   title: title,
@@ -14,7 +14,7 @@
 )
 
 = #title
-#description @article:th65.
+#description @article:th65 @book:磁层物理.
 
 #tufted.margin-note({
   image("magnetic_lines.png")
@@ -24,58 +24,36 @@
 ]
 
 ```cpp
-// th65.hpp
-#if !defined(TH65_HPP)
-#define TH65_HPP
+// gmf_th65.hpp
+#if !defined(GMF_TH65_HPP)
+#define GMF_TH65_HPP
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstddef>
+#include <numeric>
+#include <ranges>
 #include <span>
 
-namespace th65 {
-    // 给 std::array 定义一些运算
+namespace gmf_th65 { // "gmf" for "geomagnetic field", "th65" for "Taylor and Hones, 1965"
+
+    // 给 std::array 定义矢量加法和归一化；其他一些方便运算也可以定义，但这里用不上
     namespace {
         template <typename T, std::size_t N>
         std::array<T, N> operator+(const std::array<T, N>& lhs, const std::array<T, N>& rhs)
         {
             std::array<T, N> result;
-            for (std::size_t i = 0; i < N; ++i) {
-                result[i] = lhs[i] + rhs[i];
-            }
+            std::ranges::transform(lhs, rhs, result.begin(), std::plus<T>()); // 性能似乎不如手写循环，make sure you measure it!
             return result;
         }
         template <typename T, std::size_t N>
-        T normalize(std::array<T, N>& v)
+        void normalize(std::array<T, N>& v)
         {
-            T norm { static_cast<T>(0) };
-            for (std::size_t i = 0; i < N; ++i) {
-                norm += v[i] * v[i];
-            }
-            norm = std::sqrt(norm);
-
-            for (std::size_t i = 0; i < N; ++i) {
-                v[i] /= norm;
-            }
-            return norm;
-        }
-        template <typename T, std::size_t N>
-        std::array<T, N> operator*(T scalar, const std::array<T, N>& v)
-        {
-            std::array<T, N> result;
-            for (std::size_t i = 0; i < N; ++i) {
-                result[i] = scalar * v[i];
-            }
-            return result;
-        }
-        template <typename T, std::size_t N>
-        std::array<T, N> operator*(const std::array<T, N>& v, T scalar)
-        {
-            std::array<T, N> result;
-            for (std::size_t i = 0; i < N; ++i) {
-                result[i] = scalar * v[i];
-            }
-            return result;
+            // 平方和 ⇔ 自身内积
+            T norm_v = std::sqrt(std::inner_product(v.cbegin(), v.cend(), v.cbegin(), static_cast<T>(0)));
+            // 逐元素归一化
+            std::ranges::transform(v, v.begin(), [norm_v](T x) { return x / norm_v; });
         }
     }
 
@@ -97,7 +75,7 @@ namespace th65 {
     }
 
     // 越尾电流片的磁场
-    std::array<double, 3> cross_tail_magnetic_field(double x, double y, double z)
+    std::array<double, 3> cross_tail_current_magnetic_field(double x, double y, double z)
     {
         // 电流片在 y 方向上的尺度
         constexpr double width { 20.0 };
@@ -133,13 +111,13 @@ namespace th65 {
         // else
         //     log_cosh_u = std::log(std::cosh(u));
 
-        constexpr double B0 { 20.0 }; // nT；Taylor and Hones, 1965 取 30 nT, 并且声称这个值影响不大
+        constexpr double B0 { 25.0 }; // nT，参考《磁层物理》；Taylor and Hones, 1965 取 30 nT, 并且声称这个值影响不大
 
         double Bx { B0 * x_profile * y_profile * std::tanh(u) };
 
         // double Bz { -B0 * half_thick * log_cosh_u * y_profile * dX_dx };
 
-        return { Bx, 0.0, 0.0 }; // { Bx, 0.0, Bz }; // 磁场散度为零
+        return std::array<double, 3> { Bx, 0.0, 0.0 }; // { Bx, 0.0, Bz }; // 磁场散度为零
     }
 
     // 总磁场，tpye = void (*)(RealType, std::span<const RealType>, std::span<RealType>) 适合 rk4 调用
@@ -154,7 +132,7 @@ namespace th65 {
 
         std::array<double, 3> tot_field { earth_dipole_magnetic_field(x, y, z)
                                     + earth_dipole_magnetic_field(x - mirror_dipole_distance, y, z, mirror_dipole_strength_ratio) // 等效源，并非严格的镜像
-                                    + cross_tail_magnetic_field(x, y, z) };
+                                    + cross_tail_current_magnetic_field(x, y, z) };
         normalize(tot_field);
         dydx[0] = tot_field[0];
         dydx[1] = tot_field[1];
@@ -162,7 +140,7 @@ namespace th65 {
     }
 }
 
-#endif // TH65_HPP
+#endif // GMF_TH65_HPP
 
 
 ```
