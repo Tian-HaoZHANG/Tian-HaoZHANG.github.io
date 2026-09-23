@@ -37,33 +37,33 @@
 #include <span>
 
 namespace gmf_th65 { // "gmf" for "geomagnetic field", "th65" for "Taylor and Hones, 1965"
+    // 所有函数都是 double 精度，没有写 template
+    // 假设磁轴与自转轴重合，在 GSE 坐标系下研究，长度单位 RE
 
     // 给 std::array 定义矢量加法和归一化；其他一些方便运算也可以定义，但这里用不上
-    namespace {
-        template <typename T, std::size_t N>
-        std::array<T, N> operator+(const std::array<T, N>& lhs, const std::array<T, N>& rhs)
-        {
-            std::array<T, N> result;
-            std::ranges::transform(lhs, rhs, result.begin(), std::plus<T>()); // 性能似乎不如手写循环，make sure you measure it!
-            return result;
-        }
-        template <typename T, std::size_t N>
-        void normalize(std::array<T, N>& v)
-        {
-            // 平方和 ⇔ 自身内积
-            T norm_v = std::sqrt(std::inner_product(v.cbegin(), v.cend(), v.cbegin(), static_cast<T>(0)));
-            // 逐元素归一化
-            std::ranges::transform(v, v.begin(), [norm_v](T x) { return x / norm_v; });
-        }
+    template <typename T, std::size_t N>
+    std::array<T, N> operator+(const std::array<T, N>& lhs, const std::array<T, N>& rhs) // 这里定义的加法只在 namespace gmf_th65 内有效，外部使用请显式调用 gmf_th65::operator+()
+    {
+        std::array<T, N> result;
+        std::ranges::transform(lhs, rhs, result.begin(), std::plus<T>()); // 性能似乎不如手写循环，make sure you measure it!
+        return result;
+    }
+    template <typename T, std::size_t N>
+    void normalize(std::array<T, N>& v)
+    {
+        // 平方和 ⇔ 自身内积
+        T norm_v = std::sqrt(std::inner_product(v.cbegin(), v.cend(), v.cbegin(), static_cast<T>(0)));
+        // 逐元素归一化
+        std::ranges::transform(v, v.begin(), [norm_v](T x) { return x / norm_v; });
     }
 
-    // 地球的偶极场
-    std::array<double, 3> earth_dipole_magnetic_field(double x, double y, double z, double correction_factor = 1.0)
+    // 地球的偶极场在假设磁轴与自转轴重合的 GSE 坐标系中的值 (nT), 长度单位 RE
+    std::array<double, 3> get_earth_dipole_magnetic_field(double x, double y, double z, double correction_factor = 1.0)
     {
         constexpr double B0 { 3.11e4 }; // dipole 的磁场强度，单位为 nT * RE^3
         double r2 { x * x + y * y + z * z };
 
-        // if (r2 < 1.0) return { 0.0, 0.0, 0.0 }; // 如果在地球内部，磁场强度为零
+        // if (r2 < 1.0) return { 0.0, 0.0, 0.0 }; // 如果在地球内部，磁场强度设为零
 
         double factor { correction_factor * B0 / (r2 * r2 * std::sqrt(r2)) };
         std::array<double, 3> magnetic_field;
@@ -74,8 +74,8 @@ namespace gmf_th65 { // "gmf" for "geomagnetic field", "th65" for "Taylor and Ho
         return magnetic_field;
     }
 
-    // 越尾电流片的磁场
-    std::array<double, 3> cross_tail_current_magnetic_field(double x, double y, double z)
+    // 越尾电流片的磁场（Harris current sheet model）在假设磁轴与自转轴重合的 GSE 坐标系中的值 (nT), 长度单位 RE
+    std::array<double, 3> get_cross_tail_current_magnetic_field(double x, double y, double z)
     {
         // 电流片在 y 方向上的尺度
         constexpr double width { 20.0 };
@@ -102,16 +102,16 @@ namespace gmf_th65 { // "gmf" for "geomagnetic field", "th65" for "Taylor and Ho
         // double dX_dx { df_dx * g + f * dg_dx };
 
         // 电流片在 z 方向上的尺度
-        constexpr double half_thick { 0.16 / 2.0 }; // 电流片厚度（约 1000 km，参考《磁层物理》）的一半；Taylor and Hones, 1965 取电流片厚度为 0.5
-        // 稳定计算 ln(cosh(z/L))
+        constexpr double half_thick { 0.5 / 2.0 }; // Taylor and Hones, 1965 取电流片厚度为 0.5；《磁层物理》声称电流片厚度约 1000 km，即 0.16 —— 实际上这个值对结果的影响不大
+        // 稳定计算 ln(cosh(z/L)), 避免数值上溢
         double u { z / half_thick };
         // double log_cosh_u {};
         // if (std::abs(u) > 20.0)
-        //     log_cosh_u = std::abs(u) - std::log(2.0);  // 避免溢出
+        //     log_cosh_u = std::abs(u) - std::log(2.0);  // log 是以 e 为底的对数（自然对数）
         // else
         //     log_cosh_u = std::log(std::cosh(u));
 
-        constexpr double B0 { 25.0 }; // nT，参考《磁层物理》；Taylor and Hones, 1965 取 30 nT, 并且声称这个值影响不大
+        constexpr double B0 { 30.0 }; // Taylor and Hones, 1965 取 30 nT, 并且声称这个值影响不大；《磁层物理》说这个值为 15-40 nT
 
         double Bx { B0 * x_profile * y_profile * std::tanh(u) };
 
@@ -120,23 +120,15 @@ namespace gmf_th65 { // "gmf" for "geomagnetic field", "th65" for "Taylor and Ho
         return std::array<double, 3> { Bx, 0.0, 0.0 }; // { Bx, 0.0, Bz }; // 磁场散度为零
     }
 
-    // 总磁场，tpye = void (*)(RealType, std::span<const RealType>, std::span<RealType>) 适合 rk4 调用
-    void magnetic_field(double /* t unused */, std::span<const double> position, std::span<double> dydx)
+    // 计算并返回总磁场在假设磁轴与自转轴重合的 GSE 坐标系中的值 (nT), 长度单位 RE
+    std::array<double, 3> get_magnetic_field(double x, double y, double z)
     {
-        double x { position[0] };
-        double y { position[1] };
-        double z { position[2] };
+        constexpr double mirror_dipole_distance { 40.0 }; // mirro dipole 跟地心的间距，以 RE 为单位；参考 Taylor and Hones, 1965
+        constexpr double mirror_dipole_strength_ratio { 28.0 }; // mirror dipole 的磁矩与地球磁矩的比值；参考 Taylor and Hones, 1965
 
-        constexpr double mirror_dipole_distance { 40.0 }; // dipole 跟地心的间距，以 RE 为单位
-        constexpr double mirror_dipole_strength_ratio { 28.0 }; // dipole 的磁矩与地球磁矩的比值
-
-        std::array<double, 3> tot_field { earth_dipole_magnetic_field(x, y, z)
-                                    + earth_dipole_magnetic_field(x - mirror_dipole_distance, y, z, mirror_dipole_strength_ratio) // 等效源，并非严格的镜像
-                                    + cross_tail_current_magnetic_field(x, y, z) };
-        normalize(tot_field);
-        dydx[0] = tot_field[0];
-        dydx[1] = tot_field[1];
-        dydx[2] = tot_field[2];
+        return get_earth_dipole_magnetic_field(x, y, z)
+            + get_earth_dipole_magnetic_field(x - mirror_dipole_distance, y, z, mirror_dipole_strength_ratio) // 等效源，并非严格的镜像
+            + get_cross_tail_current_magnetic_field(x, y, z);
     }
 }
 

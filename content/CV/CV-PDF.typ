@@ -18,13 +18,17 @@
 #text(
   weight: "regular",
   size: 0.9em,
-)[A PhD student majoring in space plasma physics at Peking University, Beijing, China]
+)[PhD student majoring in space plasma physics, supervised by Professor Xu-Zhi Zhou (周煦之)\
+  Institute of Space Physics and Applied Technology, Peking University, China
+]
 
-Website: #link("https://tian-haozhang.github.io/")
-#h(3em)
 Email: #link("mailto:thzhang@stu.pku.edu.cn")
+#h(3em)
+Website: #link("https://tian-haozhang.github.io")
 
-Research in space plasma physics, with a focus on the dynamics in planetary magnetospheres. This includes the study of the interaction between solar wind and planetary magnetospheres, as well as the investigation of plasma processes in these environments.
+My research examines space plasma physics and focus on the plasma dynamics in the terrestrial magnetosphere. Currently, I investigate cross-scale couplings among wave modes in the solar wind plasma, using MMS data and kinetic simulations. I collaborate with Qiu-Gang Zong (宗秋刚)’s research group on magnetospheric physics.
+
+I aim to uncover the coupling mechanisms between mesoscale and macroscale processes in the magnetosphere, and accomplish something interesting and/or influential. I intend to transition toward industry after my PhD. I welcome conversations with colleagues who share interests in space plasma physics.
 /*== Experience
 
 - *1983--Present*: Founder & Publisher, Graphics Press. Independent publishing house specializing in information design and data visualization.
